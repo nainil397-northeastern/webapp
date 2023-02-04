@@ -25,7 +25,7 @@ class WebApplicationTests {
 	@Test
 	void onePlusTest() {
 		int sum = 1+1;
-		assertEquals(sum, 3);
+		assertEquals(sum, 2);
 	}
 
 }
