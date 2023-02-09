@@ -4,12 +4,12 @@ import com.example.webapp.model.UserModel;
 
 public interface UserService {
 
-    public UserModel getUserDataById(Integer id);
+    public UserModel getUserById(Integer id);
 
-    public UserModel getUserDataByUsername(String username);
+    public UserModel getUserByUsername(String username);
 
-    public UserModel addUserData(UserModel userModel);
+    public UserModel addUser(UserModel userModel);
 
-    public UserModel updateUserData(Integer id, UserModel userModel);
+    public UserModel updateUser(Integer id, UserModel userModel);
 
 }

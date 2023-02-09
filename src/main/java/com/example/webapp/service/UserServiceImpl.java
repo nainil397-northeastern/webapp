@@ -19,18 +19,18 @@ public class UserServiceImpl implements UserService{
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserModel getUserDataById(Integer id) {
+    public UserModel getUserById(Integer id) {
         UserModel userModel = userRepository.findByUserId(id);
         return userModel;
     }
 
-    public UserModel getUserDataByUsername(String username) {
+    public UserModel getUserByUsername(String username) {
         UserModel userModel = userRepository.findByUsername(username);
         return userModel;
     }
 
     @Override
-    public UserModel addUserData(UserModel userModel) {
+    public UserModel addUser(UserModel userModel) {
         String bcryptedPass = passwordEncoder.encode(userModel.getPassword());
         userRepository.saveUser(userModel.getFirstName(), userModel.getLastName(), userModel.getUsername(), bcryptedPass, LocalDateTime.now(ZoneOffset.UTC), LocalDateTime.now(ZoneOffset.UTC));
 
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserModel updateUserData(Integer id, UserModel userModel) {
+    public UserModel updateUser(Integer id, UserModel userModel) {
         UserModel checkUser = userRepository.findByUserId(id);
 
         String bcryptedPass = passwordEncoder.encode(userModel.getPassword());

@@ -1,14 +1,13 @@
-package com.example.webapp.service;
+package com.example.webapp.authorisation;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import org.springframework.web.filter.GenericFilterBean;
-
 import java.io.IOException;
 
-public class CustomFilter  extends GenericFilterBean {
+public class CustomFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(
