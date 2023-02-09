@@ -2,7 +2,7 @@
  Web App for Cloud Course - Nainil Maladkar
 
  This Web Application is able to create new account to mySQL database and can read from and update based on authentications and access.
-Further We Application makes use of CI workflow under github Actions.
+Further We Application makes use of CI workflow under github Actions and AWS connections for accounts.
 
 Associated Tech:
 
@@ -42,10 +42,16 @@ Git commands executed for initalizing web application over branch and main organ
 * Add a commit message -- git commit -m ""
 * push the local feature branch to the feature branch in forked repository -- git push nainil featureBranchName
 * Raise a pull request from featureBranch in forked repository to organization/main
+* SQL bootstrapped database and initialising on new port : mvn spring-boot:run -Dspring-boot.run.arguments="--DB_USERNAME=root --DB_HOST=localhost --DB_PORT=3305 --DB_NAME= --DB_PASSWORD="
 
 REST API implemented --
 * GET - v1/user/{userId} -- for retrieving user account information
 * PUT - v1/user/{userId} -- for updating user account information
 * POST - v1/user -- for creating a new user account
 * GET - healthz -- simple health check
+* POST - /v1/product --adds new product information for user.
+* GET - /v1/product/{productId} --used for viewing product information.
+* PUT - /v1/product/{productId} --updates product information of user.
+* PATCH - /v1/product/{productId} --does not require all the request attributes to be present and can work with partial requests as well.
+* DELETE - /v1/product/{productId} --deletes product information of user.
 
