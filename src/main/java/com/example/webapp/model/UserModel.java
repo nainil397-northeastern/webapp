@@ -12,10 +12,21 @@ import java.time.ZonedDateTime;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
+import com.fasterxml.jackson.annotation.*;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.ZonedDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "assignment_webapplication")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Table(name = "webapp")
 public class UserModel {
     @Id
     @Column(name="id")
@@ -26,8 +37,8 @@ public class UserModel {
     @JsonProperty(value = "first_name")
     private String firstName;
 
-    @JsonProperty(value = "last_name")
     @Column(name = "last_name")
+    @JsonProperty(value = "last_name")
     private String lastName;
 
     @Column(name = "psswrd")
@@ -40,11 +51,23 @@ public class UserModel {
 
     @Column(name = "account_created")
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    @JsonProperty(value = "account_created")
+    @JsonProperty(value = "account_created", access = READ_ONLY)
     private ZonedDateTime accountCreated;
 
     @Column(name = "account_updated")
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    @JsonProperty(value = "account_updated")
+    @JsonProperty(value = "account_updated", access = READ_ONLY)
     private ZonedDateTime accountUpdated;
+
+    //new
+    @Column(name = "enabled")
+    @JsonProperty(value = "enabled")
+    @JsonIgnore
+    private Boolean enabled;
+
+    @Column(name = "authority")
+    @JsonProperty(value = "authority")
+    @JsonIgnore
+    private String authority;
+
 }
