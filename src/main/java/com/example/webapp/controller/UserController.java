@@ -63,7 +63,7 @@ public class UserController {
                         ErrorResponseModel errorResponse = new ErrorResponseModel();
                         errorResponse.setErr("Bad Request");
                         errorResponse.setStatus(400);
-                        errorResponse.setMessage("One or more fields are too short");
+                        errorResponse.setMessage("One/more fields are short");
                         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                     } else {
                         UserModel newUser = userServiceImpl.addUser(userModel);

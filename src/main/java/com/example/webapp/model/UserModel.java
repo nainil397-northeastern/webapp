@@ -29,6 +29,7 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Table(name = "webapp")
 public class UserModel {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     @JsonProperty(value = "id")
     private Integer userId;
