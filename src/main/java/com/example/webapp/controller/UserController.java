@@ -633,7 +633,7 @@ public class UserController {
         ErrorResponseModel errorResponse = new ErrorResponseModel();
         errorResponse.setErr("Bad Request");
         errorResponse.setStatus(400);
-        errorResponse.setMessage("Quantity cannot be a string");
+        errorResponse.setMessage("Quantity should be an integer ");
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
