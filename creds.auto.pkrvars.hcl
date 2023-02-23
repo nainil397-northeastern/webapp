@@ -1,3 +1,4 @@
+
 ami_id                = "ami-0dfcb1ef8550277af"
 jar_source            = "./target/webapp-0.0.1-SNAPSHOT.jar"
 app_name              = "webapp"
