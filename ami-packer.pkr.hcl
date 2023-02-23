@@ -58,19 +58,29 @@ variable "volume_type" {
   default = "gp2"
 }
 
+variable "access_key" {
+  type    = string
+  // default = true
+}
+
+variable "secret_key" {
+  type    = string
+  // default = true
+}
+
 locals {
   timestamp_val = formatdate("YYYYMMDDhhmmss", timestamp())
 }
 
-source "amazon-ebs" "aditya_ami" {
+source "amazon-ebs" "nainil_ami" {
   ami_name      = "packer-${var.app_name}-${local.timestamp_val}"
   instance_type = "${var.instance_type}"
   region        = "${var.region}"
   source_ami    = "${var.ami_id}"
   ssh_username  = "${var.ssh_username}"
   ssh_timeout   = "20m"
-  access_key    = "AKIAZXLZ7VZFP6DUJ6GT"
-  secret_key    = "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"
+  access_key    = "${var.access_key}"
+  secret_key    = "${var.secret_key}"
 
   ami_users = var.ami_users
 
@@ -90,7 +100,7 @@ source "amazon-ebs" "aditya_ami" {
 
 build {
 
-  sources = ["source.amazon-ebs.aditya_ami"]
+  sources = ["source.amazon-ebs.nainil_ami"]
 
   provisioner "file" {
     source      = "${var.jar_source}"
