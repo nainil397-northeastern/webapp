@@ -1,57 +1,31 @@
-# Cloud Course WebApplication 
- Web App for Cloud Course - Nainil Maladkar
+## Building Custom Application AMI using Packer
+-Use Amazon Linux 2 as source image to create a private AMI in dev AWS account using Packer.
+-Install MySQL locally in AMI and AMI builds should be set up to run in your default VPC.
+-The packer template should be stored in the same repo as the web application.
 
- This Web Application is able to create new account to mySQL database and can read from and update based on authentications and access.
-Further We Application makes use of CI workflow under github Actions and AWS connections for accounts.
+## Continuous Integration
+**When a pull request is merged, a GitHub Actions workflow should be triggered to do the following:**
+1.Run the unit test to validate Packer.
+2.Build the application artifact (war, jar, zip, etc.).
+3.Build the AMI with application dependencies and configure the application to start automatically when VM is launched.
+4.AMI template should be validated in the pull request status check.
+5.The application artifact is built for copying to AMI and AMI is built when PR is merged.
+6.AMI is automatically shared with the DEMO account. The AWS account id is provided in the Packer template.
+ 
+## App Security Group
+Create an EC2 security group for your EC2 instances that will host web applications.
+Add ingress rule to allow TCP traffic on ports `22`, `80`, `443`, and `port` on which your application runs from anywhere in the world.
 
-Associated Tech:
+## EC2 Instance
+Create an EC2 instance with the following specifications. For any parameter not provided in the table below, you may go with default values. The EC2 instance should belong to the VPC you have created.
 
-Framework: Spring Boot 
-Database: MySQL
-API Platform: Postman
-
-
-Spring supported libraries:
-
-Spring Web
-Spring Data JPA
-JDBC API
-MySQL Driver
-Spring Security
-H2 Database (used for test) 
-
-
-Prerequisites for local -
-* Creating a .gitignore file using the ready template while creating the repository. In my case I used the Java template
-* Write the workflow in .github/worflows to be executed before merging the pull request to organization/main
-* Set the required branch protections in organization/main to avoid merging of pull request if the PR fails
-
-Build and Deploy instructions for the web application -
-
-* Build application using - mvn clean install
-* Deploy the application to organization repository and run the tests using workflow - mvn test
-
-Git commands executed for initalizing web application over branch and main organization
-
-* List the remotes -- git remote -v
-* Remove the remotes -- git remote remove
-* Add new remote for forked repo -- git remote add ameya sshForForked
-* Add new remote for organization repo (upstream)-- git remote add nainil sshForOrganization
-* Create a branch -- git checkout -b branchName
-* Add all files to staging -- git add .
-* Add a commit message -- git commit -m ""
-* push the local feature branch to the feature branch in forked repository -- git push nainil featureBranchName
-* Raise a pull request from featureBranch in forked repository to organization/main
-* SQL bootstrapped database and initialising on new port : mvn spring-boot:run -Dspring-boot.run.arguments="--DB_USERNAME=root --DB_HOST=localhost --DB_PORT=3305 --DB_NAME= --DB_PASSWORD="
-
-REST API implemented --
-* GET - v1/user/{userId} -- for retrieving user account information
-* PUT - v1/user/{userId} -- for updating user account information
-* POST - v1/user -- for creating a new user account
-* GET - healthz -- simple health check
-* POST - /v1/product --adds new product information for user.
-* GET - /v1/product/{productId} --used for viewing product information.
-* PUT - /v1/product/{productId} --updates product information of user.
-* PATCH - /v1/product/{productId} --does not require all the request attributes to be present and can work with partial requests as well.
-* DELETE - /v1/product/{productId} --deletes product information of user.
-
+**Parameter Value**
+Amazon Machine Image (AMI)             : 	Your custom AMI
+Instance Type                          : 	t2.micro
+Protect against accidental termination :	No
+Root Volume Size                       : 	50
+Root Volume Type                       :	General Purpose SSD (GP2)
+ 
+### Deploying Application by Launching the AMI
+To demo a properly built AMI, launch the EC2 instance with the custom AMI using the Terraform template.
+The application should work when the EC2 instance is in a "running" state.
