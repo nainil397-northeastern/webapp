@@ -20,11 +20,11 @@ Add ingress rule to allow TCP traffic on ports `22`, `80`, `443`, and ` 8080 por
 Create an EC2 instance with the following specifications. For any parameter not provided in the table below, you may go with default values. The EC2 instance should belong to the VPC you have created.
 
 *Parameter Value*
-<br Amazon Machine Image (AMI)             : 	Your custom AMI />
-<br Instance Type                          : 	t2.micro />
-<br Protect against accidental termination :	No />
-<br Root Volume Size                       : 	50 />
-<br Root Volume Type                       :	General Purpose SSD (GP2) />
+<br 1. Amazon Machine Image (AMI)             : 	Your custom AMI />
+<br 2. Instance Type                          : 	t2.micro />
+<br 3. Protect against accidental termination :	No />
+<br 4. Root Volume Size                       : 	50 />
+<br 5. Root Volume Type                       :	General Purpose SSD (GP2) />
  
 ### Deploying Application by Launching the AMI
 To demo a properly built AMI, launch the EC2 instance with the custom AMI using the Terraform template.
