@@ -1,7 +1,7 @@
-variable "ami_id" {
-  type    = string
-  default = "ami-0dfcb1ef8550277af"
-}
+# variable "ami_id" {
+#   type    = string
+#   default = "ami-0dfcb1ef8550277af"
+# }
 
 variable "jar_source" {
   type    = string
