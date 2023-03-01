@@ -20,9 +20,9 @@ jobs:
       - name: My Test 1
         run: echo "run a test"
       - name: Build with Maven - My Test 2
-        run: mvn clean install
+        run: mvn clean install "-DAWS_REGION=us-east-1" "-DAWS_BUCKET_NAME=abcd"
       - name: Maven Testing - My Test 3 
-        run: mvn test
+        run: mvn test "-DAWS_REGION=us-east-1" "-DAWS_BUCKET_NAME=abcd"
 
       - uses: actions/checkout@v2
       - name: Set up JDK 17
