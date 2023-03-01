@@ -54,15 +54,15 @@ public class S3Config {
 //    return awsCredentialsProvider;
 //    }
 
-    @Bean
-    @Primary
-    public AmazonS3 getS3Client()
-    {
-        AmazonS3 amazonS3= AmazonS3ClientBuilder
-                .standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials()))
-                .withRegion(region)
-                .build();
-        return amazonS3;
-    }
+//    @Bean
+//    @Primary
+//    public AmazonS3 getS3Client()
+//    {
+//        AmazonS3 amazonS3= AmazonS3ClientBuilder
+//                .standard()
+//                .withCredentials(new AWSStaticCredentialsProvider(credentials()))
+//                .withRegion(region)
+//                .build();
+//        return amazonS3;
+//    }
 }
