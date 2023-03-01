@@ -19,6 +19,14 @@ jobs:
           distribution: 'temurin'
       - name: My Test 1
         run: echo "run a test"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          
       - name: Build with Maven - My Test 2
         run: mvn clean install "-DAWS_REGION=us-east-1" "-DAWS_BUCKET_NAME=abcd"
       - name: Maven Testing - My Test 3 
