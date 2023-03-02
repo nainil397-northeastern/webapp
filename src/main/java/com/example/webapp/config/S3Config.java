@@ -1,59 +1,32 @@
 package com.example.webapp.config;
 
-import com.amazonaws.auth.*;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.securitytoken.AWSSecurityTokenService;
-import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder;
-import io.micrometer.common.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-//@Configuration
+@Configuration
 public class S3Config {
-//
-//     @Value("${aws.access.key.id}")
-//     private String accessKey;
-//
-//     @Value("${aws.secret.access.key}")
-//     private String secretKey;
-//
-//     @Value("${aws.s3.region}")
-//     private String region;
-//
-//     public AWSCredentials credentials() {
-//         AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-//         return credentials;
-//     }
 
-//    @Value("${cloud.aws.assumeRoleARN:}")
-//    private String assumeRoleARN;
+//    @Value("${aws.access.key.id}")
+//    private String accessKey;
 //
-//    @Autowired
+//    @Value("${aws.secret.access.key}")
+//    private String secretKey;
 //
-//    private AWSCredentialsProvider awsCredentialsProvider;
+//    @Value("${aws.s3.region}")
+//    private String region;
 //
-//    @Bean
-//    @Primary
-//    public AWSCredentialsProvider awsCredentialsProvider() {
-//        log.info("Assuming role {}",assumeRoleARN);
-//        if (StringUtils.isNotEmpty(assumeRoleARN)) {
-//            AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder.standard()
-//                    .withClientConfiguration(clientConfiguration())
-//                    .withCredentials(awsCredentialsProvider)
-//                    .build();
-//
-//            return new STSAssumeRoleSessionCredentialsProvider
-//                    .Builder(assumeRoleARN, "test")
-//                    .withStsClient(stsClient)
-//                    .build();
-//        }
-//    return awsCredentialsProvider;
+//    public AWSCredentials credentials() {
+//        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+//        return credentials;
 //    }
-
+//
 //    @Bean
 //    @Primary
 //    public AmazonS3 getS3Client()

@@ -1,7 +1,7 @@
 package com.example.webapp.service;
 
-import com.example.webapp.model.UserModel;
-import com.example.webapp.repository.UserRepository;
+import com.example.webapp.model.UserAccountModel;
+import com.example.webapp.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,43 +10,43 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserAccountServiceImpl implements UserAccountService {
 
     @Autowired
-    UserRepository userRepository;
+    UserAccountRepository userAccountRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserModel getUserById(Integer id) {
-        UserModel userModel = userRepository.findByUserId(id);
-        return userModel;
+    public UserAccountModel getUserDataById(Integer id) {
+        UserAccountModel userAccountModel = userAccountRepository.findByUserId(id);
+        return userAccountModel;
     }
 
-    public UserModel getUserByUsername(String username) {
-        UserModel userModel = userRepository.findByUsername(username);
-        return userModel;
-    }
-
-    @Override
-    public UserModel addUser(UserModel userModel) {
-        String bcryptedPass = passwordEncoder.encode(userModel.getPassword());
-        userRepository.saveUser(userModel.getFirstName(), userModel.getLastName(), userModel.getUsername(), bcryptedPass, LocalDateTime.now(ZoneOffset.UTC), LocalDateTime.now(ZoneOffset.UTC));
-
-        UserModel userModelNew = userRepository.findByUsername(userModel.getUsername());
-        return userModelNew;
+    public UserAccountModel getUserDataByUsername(String username) {
+        UserAccountModel userAccountModel = userAccountRepository.findByUsername(username);
+        return userAccountModel;
     }
 
     @Override
-    public UserModel updateUser(Integer id, UserModel userModel) {
-        UserModel checkUser = userRepository.findByUserId(id);
+    public UserAccountModel addUserData(UserAccountModel userAccountModel) {
+        String bcryptedPass = passwordEncoder.encode(userAccountModel.getPassword());
+        userAccountRepository.saveUser(userAccountModel.getFirstName(), userAccountModel.getLastName(), userAccountModel.getUsername(), bcryptedPass, LocalDateTime.now(ZoneOffset.UTC), LocalDateTime.now(ZoneOffset.UTC));
 
-        String bcryptedPass = passwordEncoder.encode(userModel.getPassword());
-        userRepository.updateUser(userModel.getFirstName(), userModel.getLastName(), userModel.getUsername(), bcryptedPass, LocalDateTime.now(ZoneOffset.UTC), id);
+        UserAccountModel userAccountModelNew = userAccountRepository.findByUsername(userAccountModel.getUsername());
+        return userAccountModelNew;
+    }
 
-        UserModel userModelNew = userRepository.findByUsername(userModel.getUsername());
-        return userModelNew;
+    @Override
+    public UserAccountModel updateUserData(Integer id, UserAccountModel userAccountModel) {
+        UserAccountModel checkUser = userAccountRepository.findByUserId(id);
+
+        String bcryptedPass = passwordEncoder.encode(userAccountModel.getPassword());
+        userAccountRepository.updateUser(userAccountModel.getFirstName(), userAccountModel.getLastName(), userAccountModel.getUsername(), bcryptedPass, LocalDateTime.now(ZoneOffset.UTC), id);
+
+        UserAccountModel userAccountModelNew = userAccountRepository.findByUsername(userAccountModel.getUsername());
+        return userAccountModelNew;
     }
 
 }

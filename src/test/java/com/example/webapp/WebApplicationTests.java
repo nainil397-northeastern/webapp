@@ -1,6 +1,6 @@
 package com.example.webapp;
 
-import com.example.webapp.controller.UserController;
+import com.example.webapp.controller.UserAccountController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
-class WebApplicationTests {
+class WebappApplicationTests {
 
-	UserController userController = new UserController();
+	UserAccountController userAccountController = new UserAccountController();
 
 	@Test
 	void contextLoads() {
@@ -19,13 +19,13 @@ class WebApplicationTests {
 
 	@Test
 	void checkHealth() {
-		assertEquals(new ResponseEntity<>(HttpStatus.OK), userController.healthz());
+		assertEquals(new ResponseEntity<>(HttpStatus.OK), userAccountController.healthz());
 	}
 
 	@Test
-	void onePlusTest() {
-		int sum = 2+2;
-		assertEquals(sum,4);
+	void mathTest() {
+		int sum = 1+1;
+		assertEquals(sum, 2);
 	}
 
 }
