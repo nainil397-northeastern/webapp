@@ -6,10 +6,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.webapp.model.ErrorResponseModel;
 import com.example.webapp.model.ImageModel;
-import com.example.webapp.model.ProductModel;
-import com.example.webapp.model.ProductModel;
-import com.example.webapp.model.UserModel;
-import com.example.webapp.model.UserModel;
+import com.example.webapp.model.ProductDataModel;
+import com.example.webapp.model.UserDataModel;
 import com.example.webapp.repository.ImageDataRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,16 +29,16 @@ import java.util.List;
 public class ImageDataServiceImpl implements ImageDataService {
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserDataServiceImpl userServiceImpl;
 
     @Autowired
-    ProductServiceImpl productServiceImpl;
+    ProductDataServiceImpl productServiceImpl;
 
     @Autowired
     ImageDataRepo imageDataRepo;
 
-    //@Autowired
-    //private AmazonS3 s3_client;
+//    @Autowired
+//    private AmazonS3 s3_client;
 
     private AmazonS3 s3_client = AmazonS3ClientBuilder.defaultClient();
 
@@ -54,10 +52,8 @@ public class ImageDataServiceImpl implements ImageDataService {
     public ResponseEntity<Object> uploadFileTos3bucket(MultipartFile multipartFile, String productIdStr, String username) {
 
         if(multipartFile.getContentType() == null || multipartFile.isEmpty()){
-            //If multipart file is empty, throw bad request error
-
             ErrorResponseModel errorResponse = new ErrorResponseModel();
-            errorResponse.setErr("Bad Request");
+            errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(400);
             errorResponse.setMessage("Please Upload Image Again");
 
@@ -65,7 +61,7 @@ public class ImageDataServiceImpl implements ImageDataService {
         }
 
         //Check if user exists
-        UserModel userData = userServiceImpl.getUserByUsername(username);
+        UserDataModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
             //If User does not exist, return Unauthorized error
@@ -91,8 +87,8 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        ProductModel productData = new ProductModel();
-        productData = productServiceImpl.getProductByProductId(productId);
+        ProductDataModel productData = new ProductDataModel();
+        productData = productServiceImpl.getProductDataByProductId(productId);
 
         if(productData == null){
             //If product with this product id does not exist, return Not Found error
@@ -134,23 +130,37 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-      //  File file;
+//        File file;
         String fileName;
         try {
             //converting multipart file to file
-          //  file = convertMultiPartToFile(multipartFile);
-            // filename
-            fileName = userData.getUserId().toString() + "-" + productData.getProductId().toString() + "-" + LocalDateTime.now(ZoneOffset.UTC) + "-" + multipartFile.getOriginalFilename();
 //            file = convertMultiPartToFile(multipartFile);
 
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
+            fileName = userData.getUserId().toString() + "-" + productData.getProductId().toString() + "-" + LocalDateTime.now(ZoneOffset.UTC) + "-" + multipartFile.getOriginalFilename();
+//            file = convertMultiPartToFile(multipartFile);
+            System.out.println(fileName);
+            System.out.println("qqqqqqqqqqqqqqqqqqqqqqq");
             InputStream file = multipartFile.getInputStream();
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(multipartFile.getSize());
-            objectMetadata.setContentType(multipartFile.getContentType());
 
+            System.out.println("bbbbbbbbbbbbbbbbbbbbbbbb");
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+
+            System.out.println("afffffffffffffffffffffffff");
+            objectMetadata.setContentLength(multipartFile.getSize());
+
+            System.out.println("wertyhhyyyyyyyyyyyyyyyy");
+            objectMetadata.setContentType(multipartFile.getContentType());
             //Saving image to Amazon S3
+            System.out.println("aaaaaertyuioiuytrewqwertyujk");
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName,fileName,file,objectMetadata);
+
+            System.out.println("bbbbbbaaawerjkuytrewertyujijuytre");
             s3_client.putObject(putObjectRequest);
+
+            //filename
+
+
         } catch (Exception e) {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
@@ -161,16 +171,20 @@ public class ImageDataServiceImpl implements ImageDataService {
         }
 
         //Save to S3
-       // s3_client.putObject(bucketName, fileName, file);
+
+//        s3_client.putObject(bucketName, fileName, file);
+
         s3_client.getUrl(bucketName, fileName);
 
         //Save data to db
         imageDataRepo.saveProductData(productId, fileName, LocalDateTime.now(ZoneOffset.UTC), String.valueOf(s3_client.getUrl(bucketName, fileName)));
 
         ImageModel imageModel = new ImageModel();
+
         imageModel = imageDataRepo.getLastAddedImageForProductId(productId);
 
-        //file.delete();
+//        file.delete();
+
         return new ResponseEntity<>(imageModel, HttpStatus.CREATED);
     }
 
@@ -180,7 +194,7 @@ public class ImageDataServiceImpl implements ImageDataService {
 //        String bucketName = "csye-6225-mytest";
 
         //Check if user exists
-        UserModel userData = userServiceImpl.getUserByUsername(username);
+        UserDataModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
             //If User does not exist, return Unauthorized error
@@ -220,8 +234,8 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        ProductModel productData = new ProductModel();
-        productData = productServiceImpl.getProductByProductId(productId);
+        ProductDataModel productData = new ProductDataModel();
+        productData = productServiceImpl.getProductDataByProductId(productId);
 
         if(productData == null){
             //If product with this product id does not exist, return Not Found error
@@ -277,7 +291,7 @@ public class ImageDataServiceImpl implements ImageDataService {
 //        String bucketName = "csye-6225-mytest";
 
         //Check if user exists
-        UserModel userData = userServiceImpl.getUserByUsername(username);
+        UserDataModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
             //If User does not exist, return Unauthorized error
@@ -303,8 +317,8 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        ProductModel productData = new ProductModel();
-        productData = productServiceImpl.getProductByProductId(productId);
+        ProductDataModel productData = new ProductDataModel();
+        productData = productServiceImpl.getProductDataByProductId(productId);
 
         if(productData == null){
             //If product with this product id does not exist, return Not Found error
@@ -327,19 +341,8 @@ public class ImageDataServiceImpl implements ImageDataService {
         }
 
         List<ImageModel> imageModels = imageDataRepo.findByProductProductId(productId);
-        if(imageModels.isEmpty()){
-            //if no images found, return not found
 
-            ErrorResponseModel errorResponse = new ErrorResponseModel();
-            errorResponse.setErr("Not Found");
-            errorResponse.setStatus(404);
-            errorResponse.setMessage("No images found");
-
-            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-        }else{
-            //return images list
-            return new ResponseEntity<>(imageModels, HttpStatus.OK);
-        }
+        return new ResponseEntity<>(imageModels, HttpStatus.CREATED);
     }
 
     public ResponseEntity<Object> deleteImageById(String productIdStr, String username, String imageIdStr) {
@@ -347,7 +350,7 @@ public class ImageDataServiceImpl implements ImageDataService {
 //        String bucketName = "csye-6225-mytest";
 
         //Check if user exists
-        UserModel userData = userServiceImpl.getUserByUsername(username);
+        UserDataModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
             //If User does not exist, return Unauthorized error
@@ -387,8 +390,8 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        ProductModel productData = new ProductModel();
-        productData = productServiceImpl.getProductByProductId(productId);
+        ProductDataModel productData = new ProductDataModel();
+        productData = productServiceImpl.getProductDataByProductId(productId);
 
         if(productData == null){
             //If product with this product id does not exist, return Not Found error
@@ -441,11 +444,19 @@ public class ImageDataServiceImpl implements ImageDataService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File(file.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convFile;
-    }
+//    public File convertMultiPartToFile(MultipartFile file) throws IOException {
+//        System.out.println("11111111111");
+//        File convFile = new File(file.getOriginalFilename());
+//        System.out.println("22222222222");
+//        FileOutputStream fos = new FileOutputStream(convFile);
+//        System.out.println("33333333333");
+//        fos.write(file.getBytes());
+//        System.out.println("44444444444");
+//        fos.close();
+//        System.out.println("55555555555");
+
+//        InputStream file = multipartFile.getInputStream();
+//
+//        return convFile;
+//    }
 }

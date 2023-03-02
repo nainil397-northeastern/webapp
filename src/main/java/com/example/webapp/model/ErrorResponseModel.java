@@ -15,5 +15,4 @@ public class ErrorResponseModel {
 
     @JsonProperty(value = "error")
     public String err;
-
 }

@@ -1,7 +1,7 @@
 package com.example.webapp.repository;
 
 import com.example.webapp.model.ImageModel;
-import com.example.webapp.model.ProductModel;
+import com.example.webapp.model.ProductDataModel;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

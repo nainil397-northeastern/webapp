@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.ZonedDateTime;
 
@@ -22,15 +20,14 @@ public class ImageModel {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="image_id")
-    @JsonProperty(value = "image_id", access = READ_ONLY)
+    @JsonProperty(value = "image_id")
     private Integer imageId;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name="product_id",referencedColumnName = "id")
-    @JsonProperty(value="product_id")
+    @JsonProperty(value="product_id", access = READ_ONLY)
     @JsonIdentityReference(alwaysAsId = true)
-    private ProductModel product;
+    private ProductDataModel product;
 
     @JsonProperty(value = "file_name", access = READ_ONLY)
     @Column(name = "file_name")
