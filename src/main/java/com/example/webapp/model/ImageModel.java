@@ -22,13 +22,12 @@ public class ImageModel {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="image_id")
-    @JsonProperty(value = "image_id", access = READ_ONLY)
+    @JsonProperty(value = "image_id")
     private Integer imageId;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name="product_id",referencedColumnName = "id")
-    @JsonProperty(value="product_id")
+    @JsonProperty(value="product_id", access = READ_ONLY)
     @JsonIdentityReference(alwaysAsId = true)
     private ProductModel product;
 
