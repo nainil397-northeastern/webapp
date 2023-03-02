@@ -21,7 +21,7 @@ public class ControllerTest {
     @Test
     public void onePlusTest() {
         int sum = 1+1;
-        assertEquals(sum, 2);
+        assertEquals(sum, 3);
     }
 
 }
