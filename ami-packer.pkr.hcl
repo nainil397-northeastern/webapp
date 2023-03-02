@@ -13,6 +13,7 @@ variable "config_source" {
   default = "./scripts/app2.service"
 }
 
+
 variable "app_name" {
   type    = string
   default = "webapp"
@@ -48,16 +49,6 @@ variable "delete_on_termination" {
   default = true
 }
 
-variable "volume_size" {
-  type    = number
-  default = 50
-}
-
-variable "volume_type" {
-  type    = string
-  default = "gp2"
-}
-
 variable "access_key" {
   type    = string
   // default = true
@@ -68,11 +59,21 @@ variable "secret_key" {
   // default = true
 }
 
+variable "volume_size" {
+  type    = number
+  default = 50
+}
+
+variable "volume_type" {
+  type    = string
+  default = "gp2"
+}
+
 locals {
   timestamp_val = formatdate("YYYYMMDDhhmmss", timestamp())
 }
 
-source "amazon-ebs" "nainil_ami" {
+source "amazon-ebs" "ameya_ami" {
   ami_name      = "packer-${var.app_name}-${local.timestamp_val}"
   instance_type = "${var.instance_type}"
   region        = "${var.region}"
@@ -81,9 +82,7 @@ source "amazon-ebs" "nainil_ami" {
   ssh_timeout   = "20m"
   access_key    = "${var.access_key}"
   secret_key    = "${var.secret_key}"
-
-
-  ami_users = var.ami_users
+  ami_users     = var.ami_users
 
   tags = {
     Env  = "${var.env}"
@@ -101,7 +100,7 @@ source "amazon-ebs" "nainil_ami" {
 
 build {
 
-  sources = ["source.amazon-ebs.nainil_ami"]
+  sources = ["source.amazon-ebs.ameya_ami"]
 
   provisioner "file" {
     source      = "${var.jar_source}"

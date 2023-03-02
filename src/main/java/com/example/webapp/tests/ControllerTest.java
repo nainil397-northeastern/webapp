@@ -1,6 +1,6 @@
 package com.example.webapp.tests;
 
-import com.example.webapp.controller.UserController;
+import com.example.webapp.controller.UserAccountController;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -11,11 +11,11 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 public class ControllerTest {
 
-    UserController userController = new UserController();
+    UserAccountController userAccountController = new UserAccountController();
 
     @Test
     public void checkHealth() {
-        assertEquals(new ResponseEntity<>(HttpStatus.NO_CONTENT), userController.healthz());
+        assertEquals(new ResponseEntity<>(HttpStatus.NO_CONTENT), userAccountController.healthz());
     }
 
     @Test

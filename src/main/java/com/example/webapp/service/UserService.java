@@ -1,15 +1,15 @@
 package com.example.webapp.service;
 
-import com.example.webapp.model.UserModel;
+import com.example.webapp.model.UserAccountModel;
 
-public interface UserService {
+public interface UserAccountService {
 
-    public UserModel getUserById(Integer id);
+    public UserAccountModel getUserDataById(Integer id);
 
-    public UserModel getUserByUsername(String username);
+    public UserAccountModel getUserDataByUsername(String username);
 
-    public UserModel addUser(UserModel userModel);
+    public UserAccountModel addUserData(UserAccountModel userAccountModel);
 
-    public UserModel updateUser(Integer id, UserModel userModel);
+    public UserAccountModel updateUserData(Integer id, UserAccountModel userAccountModel);
 
 }

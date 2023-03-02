@@ -1,17 +1,5 @@
 package com.example.webapp.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-
-import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
-import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
-
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,10 +14,10 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Setter
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@Table(name = "user")
-public class UserModel {
+@Table(name = "mywebapp")
+public class UserAccountModel {
     @Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     @JsonProperty(value = "id")
     private Integer userId;
@@ -38,8 +26,8 @@ public class UserModel {
     @JsonProperty(value = "first_name")
     private String firstName;
 
-    @Column(name = "last_name")
     @JsonProperty(value = "last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "psswrd")
@@ -60,7 +48,6 @@ public class UserModel {
     @JsonProperty(value = "account_updated", access = READ_ONLY)
     private ZonedDateTime accountUpdated;
 
-    //new
     @Column(name = "enabled")
     @JsonProperty(value = "enabled")
     @JsonIgnore

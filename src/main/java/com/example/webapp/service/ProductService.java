@@ -1,21 +1,20 @@
 package com.example.webapp.service;
 
 import com.example.webapp.model.ProductModel;
+import com.example.webapp.model.UserAccountModel;
+
 import java.util.List;
 
 public interface ProductService {
 
     public ProductModel getProductByProductId(Integer productId);
-
     public List<ProductModel> getProductByUserId(Integer userId);
 
-    public ProductModel addNewProduct(ProductModel productModel);
+    public ProductModel addProductData(ProductModel productModel);
 
-    public ProductModel updateOldProduct(ProductModel productModel, Integer productId);
+    public ProductModel updateProductData(Integer productId, ProductModel productModel);
 
-    public void deleteProduct(Integer productId);
+    public void deleteProductData(Integer productId);
 
-    public ProductModel searchProductById (Integer productId);
-
-    public ProductModel searchProductBySku(String sku);
 }
+

@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [ main ]
 
+
 jobs:
   build:
     name: my-java-test
@@ -18,58 +19,55 @@ jobs:
           distribution: 'temurin'
       - name: My Test 1
         run: echo "run a test"
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          
-      - name: Build with Maven - My Test 2
+
+      - name: Run Test 1 - mvn clean install
         run: mvn clean install "-DAWS_REGION=region" "-DAWS_BUCKET_NAME=bucket"
-      - name: Maven Testing - My Test 3 
+      - name: Run Test 2 - mvn test
         run: mvn test "-DAWS_REGION=region" "-DAWS_BUCKET_NAME=bucket"
 
-       #Packer workflow
+      #Packer workflow
       - uses: actions/checkout@v2
-      - name: Set up JDK 17
+      - name: Set up JDK 17 for Compiling and Running the Project
         uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'temurin'
-      
-      #This action allows caching dependencies and build outputs to improve workflow execution time.
-      - name: Cache Maven packages
+
+      #Cache dependencies and building outputs help improving workflow execution time
+      - name: Caching Maven packages
         uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-          #Build the application using Maven
-      - name: Build with Maven
+      #Building the application using Maven
+      - name: Building with Maven
         run: mvn -B package -DskipTests --file pom.xml
 
 
-        #Uploads artifacts from workflow to share data between jobs and store
-      - name: Upload JAR
+      #This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v3
         with:
-        #Set artifact name
+          #Setting artifact name here
           name: artifact
-          #From this path
+          #Getting artifact from this path
           path: target/webapp-0.0.1-SNAPSHOT.jar
 
-      - name: Download JAR
-      #Download the artifact which was uploaded in the build's job
+      #Downloading the artifact to upload for the build
+      - name: Downloading JAR
         uses: actions/download-artifact@v3
         with:
           name: artifact
 
       #Validating the packer configuration
       - name: Packer Validation Test
-#     run: export PKR_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }} && export PKR_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} && packer validate -var 'access_key=${PKR_VAR_access_key}' -var 'secret_key=${PKR_VAR_secret_key}' ami-packer.pkr.hcl
+        #         run: export PKR_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }} && export PKR_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} && packer validate -var 'access_key=${PKR_VAR_access_key}' -var 'secret_key=${PKR_VAR_secret_key}' ami-packer.pkr.hcl
         run: packer validate -var 'access_key=${{ secrets.AWS_ACCESS_KEY_ID }}' -var 'secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}' ami-packer.pkr.hcl
-
-          
