@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<UserModel,Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO webapp (first_name, last_name, username, psswrd, account_created, account_updated, authority, enabled) VALUES ( ?1 , ?2 , ?3 , ?4 , ?5, ?6, 'USER', 1)", nativeQuery = true)
+    @Query(value = "INSERT INTO user (first_name, last_name, username, psswrd, account_created, account_updated, authority, enabled) VALUES ( ?1 , ?2 , ?3 , ?4 , ?5, ?6, 'USER', 1)", nativeQuery = true)
     void saveUser(String firstName, String lastName, String username, String password, LocalDateTime accountCreated, LocalDateTime accountUpdated);
 
     @Modifying

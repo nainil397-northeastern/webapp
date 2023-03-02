@@ -21,6 +21,7 @@ import com.example.webapp.service.ProductServiceImpl;
 import com.example.webapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,9 +30,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
-import java.security.Principal;
-import java.util.regex.Pattern;
-
+import java.io.File;
 
 @RestController
 @ControllerAdvice

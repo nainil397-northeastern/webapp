@@ -2,6 +2,8 @@ package com.example.webapp.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.webapp.model.ErrorResponseModel;
 import com.example.webapp.model.ImageModel;
 import com.example.webapp.model.ProductModel;
@@ -50,6 +52,17 @@ public class ImageDataServiceImpl implements ImageDataService {
 
     @Override
     public ResponseEntity<Object> uploadFileTos3bucket(MultipartFile multipartFile, String productIdStr, String username) {
+
+        if(multipartFile.getContentType() == null || multipartFile.isEmpty()){
+            //If multipart file is empty, throw bad request error
+
+            ErrorResponseModel errorResponse = new ErrorResponseModel();
+            errorResponse.setErr("Bad Request");
+            errorResponse.setStatus(400);
+            errorResponse.setMessage("Please Upload Image Again");
+
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
 
         //Check if user exists
         UserModel userData = userServiceImpl.getUserByUsername(username);
@@ -121,14 +134,23 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        File file;
+      //  File file;
         String fileName;
         try {
             //converting multipart file to file
-            file = convertMultiPartToFile(multipartFile);
-
-            //filename
+          //  file = convertMultiPartToFile(multipartFile);
+            // filename
             fileName = userData.getUserId().toString() + "-" + productData.getProductId().toString() + "-" + LocalDateTime.now(ZoneOffset.UTC) + "-" + multipartFile.getOriginalFilename();
+//            file = convertMultiPartToFile(multipartFile);
+
+            InputStream file = multipartFile.getInputStream();
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(multipartFile.getSize());
+            objectMetadata.setContentType(multipartFile.getContentType());
+
+            //Saving image to Amazon S3
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName,fileName,file,objectMetadata);
+            s3_client.putObject(putObjectRequest);
         } catch (Exception e) {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
@@ -139,7 +161,7 @@ public class ImageDataServiceImpl implements ImageDataService {
         }
 
         //Save to S3
-        s3_client.putObject(bucketName, fileName, file);
+       // s3_client.putObject(bucketName, fileName, file);
         s3_client.getUrl(bucketName, fileName);
 
         //Save data to db
@@ -148,7 +170,7 @@ public class ImageDataServiceImpl implements ImageDataService {
         ImageModel imageModel = new ImageModel();
         imageModel = imageDataRepo.getLastAddedImageForProductId(productId);
 
-        file.delete();
+        //file.delete();
         return new ResponseEntity<>(imageModel, HttpStatus.CREATED);
     }
 
@@ -305,8 +327,19 @@ public class ImageDataServiceImpl implements ImageDataService {
         }
 
         List<ImageModel> imageModels = imageDataRepo.findByProductProductId(productId);
+        if(imageModels.isEmpty()){
+            //if no images found, return not found
 
-        return new ResponseEntity<>(imageModels, HttpStatus.CREATED);
+            ErrorResponseModel errorResponse = new ErrorResponseModel();
+            errorResponse.setErr("Not Found");
+            errorResponse.setStatus(404);
+            errorResponse.setMessage("No images found");
+
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        }else{
+            //return images list
+            return new ResponseEntity<>(imageModels, HttpStatus.OK);
+        }
     }
 
     public ResponseEntity<Object> deleteImageById(String productIdStr, String username, String imageIdStr) {

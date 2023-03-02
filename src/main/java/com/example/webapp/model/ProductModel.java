@@ -3,8 +3,12 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
@@ -53,8 +57,12 @@ public class ProductModel {
     private ZonedDateTime date_last_updated;
 
     @ManyToOne
+    @OnDelete(action= OnDeleteAction.CASCADE)
     @JoinColumn(name="owner_user_id",referencedColumnName = "id")
     @JsonProperty(value="owner_user_id", access = READ_ONLY)
     @JsonIdentityReference(alwaysAsId = true)
     private UserModel user;
+
+//    @OneToMany(cascade= CascadeType.REMOVE, mappedBy = "product")
+//    private List<ImageModel> images;
 }
