@@ -1,34 +1,38 @@
-# Building Custom Application AMI using Packer
--Use Amazon Linux 2 as source image to create a private AMI in dev AWS account using Packer.
+# Infrastructure as code with Terraform 
+-Update Terraform template for application to add DB Security, S3 bucketUse Amazon Linux 2 as source image to create a private AMI in dev AWS account using Packer.
 -Install MySQL locally in AMI and AMI builds should be set up to run in your default VPC.
 -The packer template should be stored in the same repo as the web application.
 
-## Continuous Integration
-*When a pull request is merged, a GitHub Actions workflow should be triggered to do the following:*
-1. Run the unit test to validate Packer.
-2. Build the application artifact (war, jar, zip, etc.).
-3. Build the AMI with application dependencies and configure the application to start automatically when VM is launched.
-4. AMI template should be validated in the pull request status check.
-5. The application artifact is built for copying to AMI and AMI is built when PR is merged.
-6. AMI is automatically shared with the DEMO account. The AWS account id is provided in the Packer template.
- 
-## App Security Group
-Create an EC2 security group for your EC2 instances that will host web applications.
-Add ingress rule to allow TCP traffic on ports `22`, `80`, `443`, and ` 8080 port` on which your application runs from anywhere in the world.
+### DB Security Group
+1. Create an EC2 security group for RDS instances and add ingress rule to allow TCP traffic on the port 3306 for MySQL.
+2. Source of the traffic is `application security group` and restrict access to the instance from the internet, this security group is referred as `database security group`
 
-## EC2 Instance
-Create an EC2 instance with the following specifications. For any parameter not provided in the table below, you may go with default values. The EC2 instance should belong to the VPC you have created.
-
-*Parameter Value*
-<br 1. Amazon Machine Image (AMI)             : 	Your custom AMI />
-<br 2. Instance Type                          : 	t2.micro />
-<br 3. Protect against accidental termination :	No />
-<br 4. Root Volume Size                       : 	50 />
-<br 5. Root Volume Type                       :	General Purpose SSD (GP2) />
+### S3 Bucket
+1. Create a private S3 bucket with a randomly generated bucket name depending on the environment and enable default encryption for S3 BucketsLinks to an external site.
+2. Create a lifecycle policy for the bucket to transition objects from `STANDARD storage class` to `STANDARD_IA` storage class after 30 days.
  
-### Deploying Application by Launching the AMI
-To demo a properly built AMI, launch the EC2 instance with the custom AMI using the Terraform template.
-The application should work when the EC2 instance is in a "running" state.
+### RDS Instance
+1. Create `DB parameter group` to match your database MySQL and its version. Then RDS DB instance must use the new parameter group and not the default parameter group.
+2. `Database security group` should be attached to RDS instance, which should be created with the following configuration. 
+```
+Property        	    Value
+Database Engine	        MySQL
+DB Instance Class	    db.t3.micro
+Multi-AZ deployment	    No
+DB instance identifier	csye6225
+Master username	        csye6225
+Subnet group	        Private subnet for RDS instances
+Public accessibility	No
+Database name	        csye6225
+```
+
+### User Data
+1. EC2 instance should be launched with user dataLinks to an external site with `Database username`, `password`, `hostname`, and `S3 bucket name` 
+2. The S3 bucket name must be passed to the application via EC2 user data.
+
+### IAM Policy and Role
+1. WebAppS3 policy will allow EC2 instances to perform S3 buckets. This is required for applications for EC2 instance to talk to the S3 bucket.
+2. Create an IAM role `EC2-CSYE6225` for the EC2 service and attach the WebAppS3 policy to it. 
 
 ### Packer commands to initiate AWS AMI and EC2
 1. packer fmt -recursive .

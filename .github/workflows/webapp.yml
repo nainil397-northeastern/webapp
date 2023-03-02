@@ -5,7 +5,6 @@ on:
   pull_request:
     branches: [ main ]
 
-
 jobs:
   build:
     name: my-java-test
@@ -28,10 +27,11 @@ jobs:
           aws-region: us-east-1
           
       - name: Build with Maven - My Test 2
-        run: mvn clean install "-DAWS_REGION=us-east-1" "-DAWS_BUCKET_NAME=abcd"
+        run: mvn clean install "-DAWS_REGION=region" "-DAWS_BUCKET_NAME=bucket"
       - name: Maven Testing - My Test 3 
-        run: mvn test "-DAWS_REGION=us-east-1" "-DAWS_BUCKET_NAME=abcd"
+        run: mvn test "-DAWS_REGION=region" "-DAWS_BUCKET_NAME=bucket"
 
+       #Packer workflow
       - uses: actions/checkout@v2
       - name: Set up JDK 17
         uses: actions/setup-java@v2
@@ -39,21 +39,22 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       
-      - name: Cache Maven packages
       #This action allows caching dependencies and build outputs to improve workflow execution time.
+      - name: Cache Maven packages
         uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+          #Build the application using Maven
       - name: Build with Maven
         run: mvn -B package -DskipTests --file pom.xml
-        #Build the application using Maven
-      
+
+
+        #Uploads artifacts from workflow to share data between jobs and store
       - name: Upload JAR
-        #This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete.
-        uses: actions/upload-artifact@v3
+         uses: actions/upload-artifact@v3
         with:
         #Set artifact name
           name: artifact
@@ -66,7 +67,9 @@ jobs:
         with:
           name: artifact
 
+      #Validating the packer configuration
       - name: Packer Validation Test
-        run: export PKR_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }} && export PKR_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} && packer validate -var 'access_key=${PKR_VAR_access_key}' -var 'secret_key=${PKR_VAR_secret_key}' ami-packer.pkr.hcl
+#     run: export PKR_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }} && export PKR_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} && packer validate -var 'access_key=${PKR_VAR_access_key}' -var 'secret_key=${PKR_VAR_secret_key}' ami-packer.pkr.hcl
+        run: packer validate -var 'access_key=${{ secrets.AWS_ACCESS_KEY_ID }}' -var 'secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}' ami-packer.pkr.hcl
 
           

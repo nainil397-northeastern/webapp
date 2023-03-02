@@ -25,6 +25,8 @@ sudo yum install -y java-19-amazon-corretto-devel
 #source /etc/profile.d/maven.sh
 #mvn -version
 #
+#Install MySql Client
+yes | sudo yum install mysql
 ##Install MySql
 #sudo amazon-linux-extras install epel -y
 #yes | sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
@@ -70,24 +72,26 @@ sudo yum install -y java-19-amazon-corretto-devel
 #  ")
 #
 #echo "$SECURE_MYSQL"
-#
-##Write Daemon file
-#sudo touch /etc/systemd/system/app1.service
-#sudo sh -c "echo '[Unit]' >> /etc/systemd/system/app1.service"
-#sudo sh -c "echo 'Description=Spring init sample' >> /etc/systemd/system/app1.service"
-#sudo sh -c "echo 'After=syslog.target' >> /etc/systemd/system/app1.service"
-#
-#sudo sh -c "echo '[Service]' >> /etc/systemd/system/app1.service"
-#sudo sh -c "echo 'User=ec2-user' >> /etc/systemd/system/app1.service"
-#sudo sh -c "echo 'Restart=always' >> /etc/systemd/system/app1.service"
-#sudo sh -c "echo 'RestartSec=30s' >> /etc/systemd/system/app1.service"
-#sudo sh -c "echo 'ExecStart=/usr/bin/java -jar /tmp/webapp-0.0.1-SNAPSHOT.jar --DB_USERNAME=root --server.port=8080 --DB_HOST=localhost --DB_PORT=3306 --DB_NAME=webapp2 --DB_PASSWORD=Abcde@12345 SuccessExitStatus=143' >> /etc/systemd/system/app1.service"
-#
-#sudo sh -c "echo '[Install]' >> /etc/systemd/system/app1.service"
-#sudo sh -c "echo 'WantedBy=multi-user.target' >> /etc/systemd/system/app1.service"
-#
+
+#Write Daemon file
+sudo touch /etc/systemd/system/app1.service
+sudo sh -c "echo '[Unit]' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'Description=Spring init sample' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'After=syslog.target' >> /etc/systemd/system/app2.service"
+
+sudo sh -c "echo '[Service]' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'User=ec2-user' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'EnvironmentFile=/etc/systemd/system/service.env' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'SuccessExitStatus=143' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'Restart=always' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'RestartSec=30s' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'StandardOutput=syslog' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'StandardError=syslog' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'ExecStart=/usr/bin/java -jar /tmp/webapp-0.0.1-SNAPSHOT.jar' >> /etc/systemd/system/app2.service"
+
+sudo sh -c "echo '[Install]' >> /etc/systemd/system/app2.service"
+sudo sh -c "echo 'WantedBy=multi-user.target' >> /etc/systemd/system/app2.service"
+
 #sudo systemctl start app1.service
 #sudo systemctl enable app1.service
-
-yes | sudo yum install mysql
 
