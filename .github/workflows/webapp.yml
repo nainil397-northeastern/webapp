@@ -54,7 +54,7 @@ jobs:
 
         #Uploads artifacts from workflow to share data between jobs and store
       - name: Upload JAR
-         uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
         #Set artifact name
           name: artifact
