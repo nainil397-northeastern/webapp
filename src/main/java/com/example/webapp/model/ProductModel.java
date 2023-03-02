@@ -57,7 +57,9 @@ public class ProductModel {
     private ZonedDateTime date_last_updated;
 
     @ManyToOne
+
     //@OnDelete(action= OnDeleteAction.CASCADE)
+
     @JoinColumn(name="owner_user_id",referencedColumnName = "id")
     @JsonProperty(value="owner_user_id", access = READ_ONLY)
     @JsonIdentityReference(alwaysAsId = true)
