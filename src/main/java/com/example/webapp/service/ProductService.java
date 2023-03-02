@@ -17,4 +17,3 @@ public interface ProductService {
     public void deleteProductData(Integer productId);
 
 }
-
