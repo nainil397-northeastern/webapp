@@ -16,8 +16,8 @@
 2. `Database security group` should be attached to RDS instance, which should be created with the following configuration. 
 ```
 Property        	    Value
-Database Engine	        MySQL
-DB Instance Class	    db.t3.micro
+Database Engine	            MySQL
+DB Instance Class	        db.t3.micro
 Multi-AZ deployment	    No
 DB instance identifier	csye6225
 Master username	        csye6225
