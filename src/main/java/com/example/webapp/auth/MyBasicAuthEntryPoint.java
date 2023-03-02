@@ -1,4 +1,4 @@
-package com.example.webapp.authorisation;
+package com.example.webapp.auth;
 
 import com.example.webapp.model.ErrorResponseModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,14 +19,12 @@ import org.springframework.web.context.request.WebRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
 @Component
-public class BasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
+public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx)
             throws IOException {
-        /* This function generates basic auth token and is used for user
-         * credential validation*/
+
 
         PrintWriter out = response.getWriter();
 
@@ -51,6 +49,4 @@ public class BasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
         setRealmName("spring");
         super.afterPropertiesSet();
     }
-
-
 }

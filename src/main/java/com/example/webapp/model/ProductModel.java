@@ -58,4 +58,3 @@ public class ProductModel {
     private UserAccountModel user;
 
 }
-

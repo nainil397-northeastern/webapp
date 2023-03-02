@@ -1,6 +1,5 @@
-package com.example.webapp.authorisation;
+package com.example.webapp.auth;
 
-import com.example.webapp.model.ErrorResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,43 +28,31 @@ public class BasicAuth {
     private DataSource dataSource;
 
     @Autowired
-    private BasicAuthEntryPoint basicAuthEntryPoint;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        /* This function will be used to encode the user's password using
-        BCrypt algorithm*/
-
-        return new BCryptPasswordEncoder();
-    }
+    private MyBasicAuthEntryPoint authenticationEntryPoint;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)
             throws Exception {
 
-        /* This function is used to get the user authorities and credentials
-         * for user access verification*/
+        System.out.println(dataSource.getConnection().getMetaData());
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select username, psswrd, enabled "
-                        + "from webapp "
+                        + "from mywebapp "
                         + "where username = ?")
                 .authoritiesByUsernameQuery("select username, authority "
-                        + "from webapp "
+                        + "from mywebapp "
                         + "where username = ?");
+
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
-        return (web) -> web.ignoring().requestMatchers("/images/**","/js/**","/webjars/**");
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        /* This function is used to set authentication requirements for particular
-         * endpoints. Endpoints that are unauthenticated/ public are also included
-         * in the function*/
 
         http.csrf().disable().authorizeRequests()
                 .requestMatchers("/healthz")
@@ -82,9 +69,14 @@ public class BasicAuth {
                 .authenticated()
                 .and()
                 .httpBasic()
-                .authenticationEntryPoint(basicAuthEntryPoint);
-        http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
+                .authenticationEntryPoint(authenticationEntryPoint);
         return http.build();
+    }
+
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
+        return (web) -> web.ignoring().requestMatchers("/images/**","/js/**","/webjars/**");
     }
 
 }
