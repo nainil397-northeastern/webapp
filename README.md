@@ -1,4 +1,4 @@
-# Infrastructure as code with Terraform 
+# Infrastructure as code with Terraform sdrgtfyhijlk
 -Update Terraform template for application to add DB Security, S3 bucketUse Amazon Linux 2 as source image to create a private AMI in dev AWS account using Packer.
 -Install MySQL locally in AMI and AMI builds should be set up to run in your default VPC.
 -The packer template should be stored in the same repo as the web application.
