@@ -14,6 +14,7 @@
 ### RDS Instance
 1. Create `DB parameter group` to match your database MySQL and its version. Then RDS DB instance must use the new parameter group and not the default parameter group.
 2. `Database security group` should be attached to RDS instance, which should be created with the following configuration. 
+
 ```
 Property        	    Value
 Database Engine	        MySQL
