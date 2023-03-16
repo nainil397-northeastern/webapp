@@ -19,12 +19,12 @@ public interface UserAccountRepository extends JpaRepository<UserAccountModel,In
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO user (first_name, last_name, username, psswrd, account_created, account_updated, authority, enabled) VALUES ( ?1 , ?2 , ?3 , ?4 , ?5, ?6, 'USER', 1)", nativeQuery = true)
+    @Query(value = "INSERT INTO webappuser (first_name, last_name, username, psswrd, account_created, account_updated, authority, enabled) VALUES ( ?1 , ?2 , ?3 , ?4 , ?5, ?6, 'USER', 1)", nativeQuery = true)
     void saveUser(String firstName, String lastName, String username, String password, LocalDateTime accountCreated, LocalDateTime accountUpdated);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE user SET first_name = ?1, last_name = ?2, username = ?3, psswrd = ?4, account_updated = ?5 WHERE id = ?6", nativeQuery = true)
+    @Query(value = "UPDATE webappuser SET first_name = ?1, last_name = ?2, username = ?3, psswrd = ?4, account_updated = ?5 WHERE id = ?6", nativeQuery = true)
     void updateUser(String firstName, String lastName, String username, String password, LocalDateTime accountUpdated, Integer id);
 
 
