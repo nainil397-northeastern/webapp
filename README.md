@@ -1,7 +1,7 @@
-# Infrastructure as code with Terraform sdrgtfyhijlk
--Update Terraform template for application to add DB Security, S3 bucketUse Amazon Linux 2 as source image to create a private AMI in dev AWS account using Packer.
--Install MySQL locally in AMI and AMI builds should be set up to run in your default VPC.
--The packer template should be stored in the same repo as the web application.
+# Infrastructure as code with Terraform using DNS setup 
+* Update Terraform template for application to initiate webapp on domainname, add DB Security, S3 bucketUse Amazon Linux 2 as source image to create a private AMI in dev AWS account using Packer.
+* Install MySQL locally in AMI and AMI builds should be set up to run in your default VPC.
+* The packer template should be stored in the same repo as the web application.
 
 ### DB Security Group
 1. Create an EC2 security group for RDS instances and add ingress rule to allow TCP traffic on the port 3306 for MySQL.

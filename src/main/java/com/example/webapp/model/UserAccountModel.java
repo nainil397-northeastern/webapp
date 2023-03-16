@@ -14,7 +14,7 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Setter
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@Table(name = "mywebapp")
+@Table(name = "user")
 public class UserAccountModel {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

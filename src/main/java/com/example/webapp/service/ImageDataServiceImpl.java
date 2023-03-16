@@ -138,26 +138,26 @@ public class ImageDataServiceImpl implements ImageDataService {
             //converting multipart file to file
 //            file = convertMultiPartToFile(multipartFile);
 
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
+
             fileName = userData.getUserId().toString() + "-" + productData.getProductId().toString() + "-" + LocalDateTime.now(ZoneOffset.UTC) + "-" + multipartFile.getOriginalFilename();
 //            file = convertMultiPartToFile(multipartFile);
             System.out.println(fileName);
-            System.out.println("qqqqqqqqqqqqqqqqqqqqqqq");
+
             InputStream file = multipartFile.getInputStream();
 
-            System.out.println("bbbbbbbbbbbbbbbbbbbbbbbb");
+
             ObjectMetadata objectMetadata = new ObjectMetadata();
 
-            System.out.println("afffffffffffffffffffffffff");
+
             objectMetadata.setContentLength(multipartFile.getSize());
 
-            System.out.println("wertyhhyyyyyyyyyyyyyyyy");
+
             objectMetadata.setContentType(multipartFile.getContentType());
             //Saving image to Amazon S3
-            System.out.println("aaaaaertyuioiuytrewqwertyujk");
+
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName,fileName,file,objectMetadata);
 
-            System.out.println("bbbbbbaaawerjkuytrewertyujijuytre");
+
             s3_client.putObject(putObjectRequest);
 
             //filename
@@ -284,7 +284,7 @@ public class ImageDataServiceImpl implements ImageDataService {
 
         ImageModel imageModel = imageDataRepo.findByImageId(imageId);
 
-        return new ResponseEntity<>(imageModel, HttpStatus.CREATED);
+        return new ResponseEntity<>(imageModel, HttpStatus.OK);
     }
 
     @Override
@@ -344,7 +344,7 @@ public class ImageDataServiceImpl implements ImageDataService {
 
         List<ImageModel> imageModels = imageDataRepo.findByProductProductId(productId);
 
-        return new ResponseEntity<>(imageModels, HttpStatus.CREATED);
+        return new ResponseEntity<>(imageModels, HttpStatus.OK);
     }
 
     public ResponseEntity<Object> deleteImageById(String productIdStr, String username, String imageIdStr) {
@@ -446,19 +446,4 @@ public class ImageDataServiceImpl implements ImageDataService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    public File convertMultiPartToFile(MultipartFile file) throws IOException {
-//        System.out.println("11111111111");
-//        File convFile = new File(file.getOriginalFilename());
-//        System.out.println("22222222222");
-//        FileOutputStream fos = new FileOutputStream(convFile);
-//        System.out.println("33333333333");
-//        fos.write(file.getBytes());
-//        System.out.println("44444444444");
-//        fos.close();
-//        System.out.println("55555555555");
-
-//        InputStream file = multipartFile.getInputStream();
-//
-//        return convFile;
-//    }
 }
