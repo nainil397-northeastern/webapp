@@ -73,7 +73,7 @@ locals {
   timestamp_val = formatdate("YYYYMMDDhhmmss", timestamp())
 }
 
-source "amazon-ebs" "ameya_ami" {
+source "amazon-ebs" "nainil_ami" {
   ami_name      = "packer-${var.app_name}-${local.timestamp_val}"
   instance_type = "${var.instance_type}"
   region        = "${var.region}"
@@ -100,7 +100,7 @@ source "amazon-ebs" "ameya_ami" {
 
 build {
 
-  sources = ["source.amazon-ebs.ameya_ami"]
+  sources = ["source.amazon-ebs.nainil_ami"]
 
   provisioner "file" {
     source      = "${var.jar_source}"
