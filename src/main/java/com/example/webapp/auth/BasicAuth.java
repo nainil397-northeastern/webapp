@@ -38,10 +38,10 @@ public class BasicAuth {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select username, psswrd, enabled "
-                        + "from mywebapp "
+                        + "from webappuser "
                         + "where username = ?")
                 .authoritiesByUsernameQuery("select username, authority "
-                        + "from mywebapp "
+                        + "from webappuser "
                         + "where username = ?");
 
     }
