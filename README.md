@@ -40,3 +40,5 @@ Database name	        csye6225
 1. packer fmt -recursive .
 2. packer validate -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 3. packer build -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
+
+For Assignment 6 review 
