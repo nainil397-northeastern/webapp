@@ -96,6 +96,7 @@ public class UserAccountController {
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("One or more fields are null");
+            logger.error("Null field encountered");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }else{
             if(Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)" +
@@ -110,9 +111,11 @@ public class UserAccountController {
                         errorResponse.setErr("Bad Request");
                         errorResponse.setStatus(400);
                         errorResponse.setMessage("One or more fields are too short");
+                        logger.error("Field value mismatch");
                         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                     }else{
                         UserAccountModel userNew = userServiceImpl.addUserData(userAccountModel);
+                        logger.info("User Data Added");
                         return new ResponseEntity<>(userNew, HttpStatus.CREATED);
                     }
                 } else {
@@ -120,6 +123,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("Username already exists");
+                    logger.error("Username present in system");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
             }else{
@@ -127,6 +131,7 @@ public class UserAccountController {
                 errorResponse.setErr("Bad Request");
                 errorResponse.setStatus(400);
                 errorResponse.setMessage("Enter a valid email address");
+                logger.error("Invalid Email");
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
             }
         }
@@ -139,11 +144,13 @@ public class UserAccountController {
         Integer userId;
         try {
             userId = Integer.parseInt(strUserId);
+            logger.info("User Information updated");
         } catch (NumberFormatException e) {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("User id should be an integer");
+            logger.error("User ID datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
         UserAccountModel user = new UserAccountModel();
@@ -156,6 +163,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are null");
+                    logger.error("Null value encountered");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }else{
@@ -176,18 +184,18 @@ public class UserAccountController {
                             errorResponse.setErr("Bad Request");
                             errorResponse.setStatus(400);
                             errorResponse.setMessage("One or more fields are too short");
-
+                            logger.error("Field Value mismatch");
                             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                         }else {
-                            UserAccountModel userUdpate = userServiceImpl.updateUserData(userId, userAccountModel);
-                            return new ResponseEntity<>(userUdpate, HttpStatus.NO_CONTENT);
+                            UserAccountModel userUpdate = userServiceImpl.updateUserData(userId, userAccountModel);
+                            return new ResponseEntity<>(userUpdate, HttpStatus.NO_CONTENT);
                         }
                     }else {
                         ErrorResponseModel errorResponse = new ErrorResponseModel();
                         errorResponse.setErr("Bad Request");
                         errorResponse.setStatus(400);
                         errorResponse.setMessage("Please enter correct username in request body");
-
+                        logger.error("Incorrect username value passed");
                         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                     }
                 }
@@ -196,7 +204,7 @@ public class UserAccountController {
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
                 errorResponse.setMessage("User cannot access this resource");
-
+                logger.error("Resource inaccessible");
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
         }else{
@@ -204,7 +212,7 @@ public class UserAccountController {
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
             errorResponse.setMessage("User cannot access this resource");
-
+            logger.error("Resource inaccessible");
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
@@ -216,12 +224,13 @@ public class UserAccountController {
         Integer productId;
         try {
             productId = Integer.valueOf(strProductId);
+            logger.info("Product information created");
         } catch (NumberFormatException e) {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("Product Id should be an integer");
-
+            logger.error("Product ID datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
@@ -233,9 +242,10 @@ public class UserAccountController {
             errorResponse.setErr("Not Found");
             errorResponse.setStatus(404);
             errorResponse.setMessage("Product Id does not exist");
-
+            logger.error("No information against Product ID");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }else{
+            logger.info("Product data retrieved");
             return new ResponseEntity<>(productData, HttpStatus.OK);
         }
 
@@ -254,7 +264,7 @@ public class UserAccountController {
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
             errorResponse.setMessage("Invalid credentials. User access denied.");
-
+            logger.error("Credential  mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
 
@@ -268,7 +278,7 @@ public class UserAccountController {
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("Quantity should be an integer");
-
+            logger.error("Quantity datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
@@ -277,10 +287,11 @@ public class UserAccountController {
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("One or more fields are null");
-
+            logger.error("Null value encountered in Field");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }else{
             ProductModel searchProduct = new ProductModel();
+            logger.info("Product data searched by SKU");
             searchProduct = productServiceImpl.searchProductDataBySku(productModel.getSku());
 
             if(searchProduct == null){
@@ -289,6 +300,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are too short");
+                    logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }else if(productModel.getQuantity()<0 || productModel.getQuantity() > 100){
@@ -296,10 +308,11 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("Quantity should be between 0 and 100, both inclusive");
-
+                    logger.error("Quantity out of limit");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }else{
                     ProductModel newProductData = productServiceImpl.addProductData(productModel);
+                    logger.info("Information created against Product");
                     return new ResponseEntity<>(newProductData, HttpStatus.CREATED);
                 }
 
@@ -308,6 +321,7 @@ public class UserAccountController {
                 errorResponse.setErr("Bad Request");
                 errorResponse.setStatus(400);
                 errorResponse.setMessage("SKU already exists");
+                logger.error("Existing SKU encountered");
 
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
             }
@@ -326,7 +340,7 @@ public class UserAccountController {
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
             errorResponse.setMessage("Invalid credentials. User access denied.");
-
+            logger.error("Credential Mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
 
@@ -340,7 +354,7 @@ public class UserAccountController {
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("Product Id should be an integer");
-
+            logger.error("Product ID datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
@@ -349,10 +363,12 @@ public class UserAccountController {
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("One or more fields are null");
+            logger.error("Null value for Fields");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }else{
             ProductModel searchProduct = new ProductModel();
+            logger.info("Product information searched");
             searchProduct = productServiceImpl.searchProductDataById(productId);
 
             if(searchProduct == null){
@@ -360,6 +376,7 @@ public class UserAccountController {
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
                 errorResponse.setMessage("User cannot access this resource");
+                logger.error("Inaccessible User");
 
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }else if(searchProduct.getUser().getUserId() != userData.getUserId()){
@@ -367,6 +384,7 @@ public class UserAccountController {
                 errorResponse.setErr("Forbideen");
                 errorResponse.setStatus(403);
                 errorResponse.setMessage("User cannot access this resource");
+                logger.error("Inaccessible User");
 
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }else{
@@ -375,6 +393,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are too short");
+                    logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }else if(productModel.getQuantity()<0 || productModel.getQuantity() > 100){
@@ -382,6 +401,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("Quantity should be between 0 and 100, both inclusive");
+                    logger.error("Quantity out of bounds");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }else{
@@ -476,7 +496,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are too short");
-
+                    logger.error("Incorrect Field value");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
             }else {
@@ -489,7 +509,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are too short");
-
+                    logger.error("Incorrect Field value");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
             }else {
@@ -502,6 +522,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are too short");
+                    logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
@@ -515,6 +536,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are too short");
+                    logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
@@ -528,6 +550,7 @@ public class UserAccountController {
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
                     errorResponse.setMessage("One or more fields are too short");
+                    logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
@@ -561,6 +584,7 @@ public class UserAccountController {
                         errorResponse.setErr("Bad Request");
                         errorResponse.setStatus(400);
                         errorResponse.setMessage("SKU already exists");
+                        logger.error("Existing SKU encountered");
 
                         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                     }else{
@@ -588,7 +612,7 @@ public class UserAccountController {
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
             errorResponse.setMessage("Invalid credentials. User access denied.");
-
+            logger.error("Credential Access");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
 
@@ -600,7 +624,7 @@ public class UserAccountController {
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("Product Id should be an integer");
-
+            logger.error("ProductID value datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
@@ -612,7 +636,7 @@ public class UserAccountController {
             errorResponse.setErr("Not Found");
             errorResponse.setStatus(404);
             errorResponse.setMessage("Resource not found");
-
+            logger.error("Resource Accessibility Issue");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }else{
             if(searchProduct.getUser().getUserId() == userData.getUserId()){
@@ -623,7 +647,7 @@ public class UserAccountController {
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
                 errorResponse.setMessage("User cannot access this resource");
-
+                logger.error("Accessibility Issue");
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
         }
@@ -635,7 +659,7 @@ public class UserAccountController {
         errorResponse.setErr("Bad Request");
         errorResponse.setStatus(400);
         errorResponse.setMessage("Quantity should be integer");
-
+        logger.error("Quantity value datatype mismatch");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -647,13 +671,14 @@ public class UserAccountController {
         String fileUrl = "";
         String  status = null;
         try {
+            logger.info("Image Uploaded to S3");
             return imageServiceImpl.uploadFileTos3bucket(multipartFile, productIdStr, username);
         } catch (Exception e) {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("Image cannot be uploaded. Please try again");
-
+            logger.error("Error in uploading Image");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
@@ -662,7 +687,7 @@ public class UserAccountController {
     public ResponseEntity<Object> getDetailsByImageId(@PathVariable String productIdStr, @PathVariable String imageIdStr) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-
+        logger.info("Image Fetched");
         return imageServiceImpl.getImageById(productIdStr, username, imageIdStr);
     }
 
@@ -670,7 +695,7 @@ public class UserAccountController {
     public ResponseEntity<Object> getDetailsByImageId(@PathVariable String productIdStr) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-
+        logger.info(" All Images Fetched");
         return imageServiceImpl.getImagesByProductId(productIdStr, username);
     }
 
@@ -678,7 +703,7 @@ public class UserAccountController {
     public ResponseEntity<Object> deleteDetailsByImageId(@PathVariable String productIdStr, @PathVariable String imageIdStr) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-
+        logger.info("Image Deleted");
         return imageServiceImpl.deleteImageById(productIdStr, username, imageIdStr);
     }
 
