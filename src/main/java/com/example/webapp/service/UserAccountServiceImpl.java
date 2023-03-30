@@ -2,12 +2,21 @@ package com.example.webapp.service;
 
 import com.example.webapp.model.UserAccountModel;
 import com.example.webapp.repository.UserAccountRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.regex.Pattern;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -18,13 +27,17 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
+    private final Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
+
+        @Override
     public UserAccountModel getUserDataById(Integer id) {
-        UserAccountModel userAccountModel = userAccountRepository.findByUserId(id);
-        return userAccountModel;
+            logger.info("Searching for user in the database using user ID.");
+            UserAccountModel userAccountModel = userAccountRepository.findByUserId(id);
+            return userAccountModel;
     }
 
     public UserAccountModel getUserDataByUsername(String username) {
+        logger.info("Searching for user in database using username.");
         UserAccountModel userAccountModel = userAccountRepository.findByUsername(username);
         return userAccountModel;
     }

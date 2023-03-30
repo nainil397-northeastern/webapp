@@ -6,6 +6,8 @@ import com.example.webapp.model.UserAccountModel;
 import com.example.webapp.service.ImageDataServiceImpl;
 import com.example.webapp.service.ProductServiceImpl;
 import com.example.webapp.service.UserAccountServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +27,8 @@ import java.io.File;
 @RestController
 //@ControllerAdvice
 public class UserAccountController {
+
+    private final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
     @Autowired
     UserAccountServiceImpl userServiceImpl;
 
@@ -35,6 +39,7 @@ public class UserAccountController {
     ProductServiceImpl productServiceImpl;
     @GetMapping(path="/healthz")
     public ResponseEntity<UserAccountModel> healthz(){
+        logger.info("Heath check is being recorded.");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -45,6 +50,7 @@ public class UserAccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Integer userId;
+
         try {
             userId = Integer.parseInt(strUserId);
         } catch (NumberFormatException e) {
@@ -52,6 +58,7 @@ public class UserAccountController {
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("User id should be an integer");
+            logger.error("UserID is not an integer");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -60,13 +67,14 @@ public class UserAccountController {
 
         if(user != null){
             if(user.getUsername().equals(username)){
+                logger.info("UserID is accessible");
                 return new ResponseEntity<>(user, HttpStatus.OK);
             }else {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
                 errorResponse.setMessage("User cannot access this resource");
-
+                logger.error("User unable to access resource");
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
         }else{
@@ -74,6 +82,7 @@ public class UserAccountController {
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
             errorResponse.setMessage("User cannot access this resource");
+            logger.error("User unable to access resource");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
