@@ -70,6 +70,8 @@ public class BasicAuth {
                 .and()
                 .httpBasic()
                 .authenticationEntryPoint(authenticationEntryPoint);
+                 http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
+				
         return http.build();
     }
 
