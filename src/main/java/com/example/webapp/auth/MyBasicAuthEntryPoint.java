@@ -34,7 +34,7 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
         /* This function generates basic auth token and is used for user
         * credential validation*/
 
-        if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
+       if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
 
             statsd.incrementCounter("endpoint.get.v1.user");
             logger.info("Entered: GET /v1/user/userId");
@@ -97,32 +97,12 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
             logger.error("Invalid credentials. Error encountered");
             logger.info("Returned invalid credentials error. Application idle.");
 
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("DELETE") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")){
+        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("DELETE") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")) {
 
             statsd.incrementCounter("endpoint.delete.v1.product");
             logger.info("Entered: DELETE /v1/product/productId");
             logger.error("Invalid credentials. Error encountered");
             logger.info("Returned invalid credentials error. Application idle.");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("POST") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image")){
-
-            statsd.incrementCounter("endpoint.post.v1.product.image");
-            logger.info("Entered: POST /v1/product/productId/image");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image/")){
-
-            statsd.incrementCounter("endpoint.get.v1.product.image");
-            logger.info("Entered: GET /v1/product/productId/image/imageId");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image")){
-
-            statsd.incrementCounter("endpoint.get.v1.product.images");
-            logger.info("Entered: GET /v1/product/productId/image");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("DELETE") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image/")){
-
-            statsd.incrementCounter("endpoint.delete.v1.product.image");
-            logger.info("Entered: DELETE /v1/product/productId/image/imageId");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/healthz")){
 

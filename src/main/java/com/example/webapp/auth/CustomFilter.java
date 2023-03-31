@@ -42,8 +42,7 @@ public class CustomFilter  extends GenericFilterBean {
             ServletRequest request,
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-
-        if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
+if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
 
             statsd.incrementCounter("endpoint.get.v1.user");
             logger.info("Entered: GET /v1/user/userId");
@@ -52,26 +51,6 @@ public class CustomFilter  extends GenericFilterBean {
 
             statsd.incrementCounter("endpoint.put.v1.user");
             logger.info("Entered: PUT /v1/user/userId");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("POST") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product")){
-
-            statsd.incrementCounter("endpoint.post.v1.product");
-            logger.info("Entered: POST /v1/product");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PUT") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")){
-
-            statsd.incrementCounter("endpoint.put.v1.product");
-            logger.info("Entered: PUT /v1/product/productId");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PATCH") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")){
-
-            statsd.incrementCounter("endpoint.patch.v1.product");
-            logger.info("Entered: PATCH /v1/product/productId");
-
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("DELETE") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")){
-
-            statsd.incrementCounter("endpoint.delete.v1.product");
-            logger.info("Entered: DELETE /v1/product/productId");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("POST") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image")){
 
