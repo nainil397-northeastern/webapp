@@ -36,9 +36,13 @@ Database name	        csye6225
 1. WebAppS3 policy will allow EC2 instances to perform S3 buckets. This is required for applications for EC2 instance to talk to the S3 bucket.
 2. Create an IAM role `EC2-CSYE6225` for the EC2 service and attach the WebAppS3 policy to it. 
 
+### Application Log data in CloudWatch
+1. All application log data are made available in AWS CloudWatch.
+2. Metrics on API usage available in CloudWatch with custom metric data for every API
+3. A counter is present to track API calls and `StatsD` is used for custom metrics
+
 ### Packer commands to initiate AWS AMI and EC2
 1. packer fmt -recursive .
 2. packer validate -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 3. packer build -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 
-For Assignment 6 review 
