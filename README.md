@@ -46,3 +46,4 @@ Database name	        csye6225
 2. packer validate -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 3. packer build -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 
+Assignment 7 changes
