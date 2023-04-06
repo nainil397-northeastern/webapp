@@ -41,9 +41,24 @@ Database name	        csye6225
 2. Metrics on API usage available in CloudWatch with custom metric data for every API
 3. A counter is present to track API calls and `StatsD` is used for custom metrics
 
+### Create Load Balancer Security Group
+1. Create a security group for the load balancer to access the web application.
+2. Add ingress rule to allow TCP traffic on ports `80`, and `443` from anywhere in the world.
+3. This security group will be referred to as the load balancer security group.
+
+### App Security Group Updates
+1. Update the EC2 security group for your EC2 instances that will host web applications.
+2. The ingress rule should allow TCP traffic on ports 22 and port on which your application runs.
+3. The Source of the traffic should be the load balancer security group.
+4. Restrict access to the instance from the internet.
+
+### The Auto Scaling Application Stack
+1. Web application has been accessible by the IP address of the EC2 instance on HTTP protocol. 
+2. Disable direct access to our web application using the IP address of the EC2 instance.
+3. The web application will now only be accessible from the load balancer.
+
 ### Packer commands to initiate AWS AMI and EC2
 1. packer fmt -recursive .
 2. packer validate -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 3. packer build -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 
-Assignment 7 changes
