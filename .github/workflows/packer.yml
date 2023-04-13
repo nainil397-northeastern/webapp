@@ -77,7 +77,7 @@ jobs:
           --launch-template-data "ImageId=$AMI_ID"
       - name: Instance Refresh
         run: |
-          aws autoscaling start-instance --auto-scaling-group-name asg_launch_config
+          aws autoscaling start-instance-refresh --auto-scaling-group-name asg_launch_config
 
 
       
