@@ -58,7 +58,26 @@ jobs:
       - name: Packer Build - Branches
         run: export PKR_VAR_access_key=${{ secrets.AWS_ACCESS_KEY_ID }} && export PKR_VAR_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} && packer build -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 
+      - name: AWS Configure CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID_PROD}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY_PROD}}
+          aws-region: us-east-1
 
+      - name: Get new AMI ID and create new launch template
+        working-directory: packer
+        run: |
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+          echo $AMI_ID
+          aws ec2 describe-launch-templates
+          aws ec2 create-launch-template-version \
+          --launch-template-name nainil_check \
+          --source-version 1 \
+          --launch-template-data "ImageId=$AMI_ID"
+      - name: Instance Refresh
+        run: |
+          aws autoscaling start-instance --auto-scaling-group-name asg_launch_config
 
 
       
