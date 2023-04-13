@@ -20,16 +20,16 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    public List<ProductModel> getProductByUserId(Integer userId) {
+        List<ProductModel> products = productRepository.findByUserUserId(userId);
+        return products;
+    }
+    @Override
     public ProductModel getProductByProductId(Integer productId) {
         ProductModel product = productRepository.findByProductId(productId);
         return product;
     }
 
-    @Override
-    public List<ProductModel> getProductByUserId(Integer userId) {
-        List<ProductModel> products = productRepository.findByUserUserId(userId);
-        return products;
-    }
 
     @Override
     public ProductModel addProductData(ProductModel productModel) {
