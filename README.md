@@ -67,14 +67,16 @@ Database name	        csye6225
 2. For `dev` environment, use the AWS Certificate Manager to get SSL certificates.
 3. For `demo` environment,an SSL certificate from Namecheap is used
 ```
-<br>Log in to the AWS Certificate Manager console.</br>
-<br>Choose the “Import a certificate” option.</br>
-<br>A similar form for the SSL upload will open.</br>
-<br>Paste the certificate file code as the “Certificate body”.</br>
-<br>Paste the CA-bundle code as the “Certificate chain”.</br>
-<br>Paste the Private key.</br>
-<br>Save the changes by selecting “Review and Import” </br>
+aws acm import-certificate --certificate fileb://D:/NEU\ MIS\ course\ first\ year/Cloud\ Computing/demo_nainilmaladkar_me/demo_nainilmaladkar_me.crt --certificate-chain fileb://D:/NEU\ MIS\ course\ first\ year/Cloud\ Computing/demo_nainilmaladkar_me/demo_nainilmaladkar_me.ca-bundle --private-key fileb://D:/NEU\ MIS\ course\ first\ year/Cloud\ Computing/demo_nainilmaladkar_me/private-key.pem --profile=demo
 ```
+<br> Log in to the AWS Certificate Manager console. </br>
+<br> Choose the “Import a certificate” option. </br>
+<br> A similar form for the SSL upload will open. </br>
+<br> Paste the certificate file code as the “Certificate body”. </br>
+<br> Paste the CA-bundle code as the “Certificate chain”. </br>
+<br> Paste the Private key. </br>
+<br> Save the changes by selecting “Review and Import” </br>
+
 
 ### Encrypted EBS Volumes
 1. All EC2 instances are launched with encrypted EBS volumes.

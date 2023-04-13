@@ -39,70 +39,70 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
             statsd.incrementCounter("endpoint.get.v1.user");
             logger.info("Encountered endpoint : (GET) /v1/user/userId");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PUT") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
 
             statsd.incrementCounter("endpoint.put.v1.user");
             logger.info("Encountered endpoint : (PUT) /v1/user/userId");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("POST") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image")){
 
             statsd.incrementCounter("endpoint.post.v1.product.image");
             logger.info("Encountered endpoint : (POST) /v1/product/productId/image");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image/")){
 
             statsd.incrementCounter("endpoint.get.v1.product.image");
             logger.info("Encountered endpoint : (GET) /v1/product/productId/image/imageId");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image")){
 
             statsd.incrementCounter("endpoint.get.v1.product.images");
             logger.info("Encountered endpoint : (GET) /v1/product/productId/image");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("DELETE") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image/")){
 
             statsd.incrementCounter("endpoint.delete.v1.product.image");
             logger.info("Encountered endpoint : (DELETE) /v1/product/productId/image/imageId");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("POST") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product")){
 
             statsd.incrementCounter("endpoint.post.v1.product");
             logger.info("Encountered endpoint : (POST) /v1/product");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PUT") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")){
 
             statsd.incrementCounter("endpoint.put.v1.product");
             logger.info("Encountered endpoint : (PUT) /v1/product/productId");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PATCH") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")){
 
             statsd.incrementCounter("endpoint.patch.v1.product");
             logger.info("Encountered endpoint : (PATCH) /v1/product/productId");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials ");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("DELETE") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/")) {
 
             statsd.incrementCounter("endpoint.delete.v1.product");
             logger.info("Encountered endpoint : (DELETE) /v1/product/productId");
             logger.error("Invalid credentials. Error encountered");
-            logger.info("Returned invalid credentials error. Application idle.");
+            logger.info("Returned invalid credentials");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/healthz")){
 
@@ -130,7 +130,7 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
 
         PrintWriter out = response.getWriter();
 
-        logger.error("Error encountered. User credentials invalid. Username or password incorrect");
+        logger.error("Credentials invalid. Username/password incorrect");
 
         response.addHeader("WWW-Authenticate", "Basic realm= + getRealmName() + ");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -140,12 +140,12 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
         ErrorResponseModel errorResponse = new ErrorResponseModel();
         errorResponse.setErr("Unauthorized");
         errorResponse.setStatus(401);
-        errorResponse.setMessage("Invalid credentials. Access denied.");
+        errorResponse.setMessage( "Access denied due to invalid credentials.");
 
         ObjectMapper objMapper = new ObjectMapper();
         String jsonString = objMapper.writeValueAsString(errorResponse);
 
-        logger.info("Returned invalid credentials error. Application idle.");
+        logger.info("Returned invalid credentials");
 
         out.print(jsonString);
         out.flush();
