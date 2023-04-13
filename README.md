@@ -57,6 +57,31 @@ Database name	        csye6225
 2. Disable direct access to our web application using the IP address of the EC2 instance.
 3. The web application will now only be accessible from the load balancer.
 
+### Setup Application Load Balancer For Your Web Application
+1. Set up an Application load balancer to accept HTTPS traffic on `port 443`
+2. Attach the load balancer security group to the load balancer.
+3. Verify the certificate is stored in AWS Certificate Manage.
+
+### Secure Application Endpoints
+1. Secure web application endpoints with valid SSL certificates.
+2. For `dev` environment, use the AWS Certificate Manager to get SSL certificates.
+3. For `demo` environment,an SSL certificate from Namecheap is used
+```
+<br>Log in to the AWS Certificate Manager console.</br>
+<br>Choose the “Import a certificate” option.</br>
+<br>A similar form for the SSL upload will open.</br>
+<br>Paste the certificate file code as the “Certificate body”.</br>
+<br>Paste the CA-bundle code as the “Certificate chain”.</br>
+<br>Paste the Private key.</br>
+<br>Save the changes by selecting “Review and Import” </br>
+```
+
+### Encrypted EBS Volumes
+1. All EC2 instances are launched with encrypted EBS volumes.
+2. EBS volumes is encrypted with Customer managed key created as part of Terraform template.
+### Encrypted RDS Instances
+1. RDS instances is encrypted with (a separate) Customer managed key created as part of Terraform.
+
 ### Packer commands to initiate AWS AMI and EC2
 1. packer fmt -recursive .
 2. packer validate -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl

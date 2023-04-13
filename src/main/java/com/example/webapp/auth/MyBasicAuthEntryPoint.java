@@ -109,6 +109,11 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
             statsd.incrementCounter("endpoint.get.v1.healthz");
             logger.info("Encountered endpoint : (GET) /v1/healthz");
 
+       }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/health")){
+
+           statsd.incrementCounter("endpoint.get.v1.health");
+           logger.info("Encountered endpoint : (GET) /v1/health");
+
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("POST") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user")){
 
             statsd.incrementCounter("endpoint.post.v1.user");

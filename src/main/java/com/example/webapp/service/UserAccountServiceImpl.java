@@ -28,10 +28,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     private PasswordEncoder passwordEncoder;
 
     private final Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
-
         @Override
     public UserAccountModel getUserDataById(Integer id) {
-            logger.info("Searching for user in the database using user ID.");
+            logger.info("Searching for user with userID.");
             UserAccountModel userAccountModel = userAccountRepository.findByUserId(id);
             return userAccountModel;
     }
