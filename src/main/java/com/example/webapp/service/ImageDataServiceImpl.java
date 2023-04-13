@@ -39,9 +39,6 @@ public class ImageDataServiceImpl implements ImageDataService {
     @Autowired
     ImageDataRepo imageDataRepo;
 
-//    @Autowired
-//    private AmazonS3 s3_client;
-
     private AmazonS3 s3_client = AmazonS3ClientBuilder.defaultClient();
 
     @Value("${AWS_REGION}")
@@ -62,12 +59,10 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        //Check if user exists
-        UserAccountModel userData = userServiceImpl.getUserDataByUsername(username);
+         UserAccountModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
-            //If User does not exist, return Unauthorized error
-            ErrorResponseModel errorResponse = new ErrorResponseModel();
+             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
             errorResponse.setMessage("Invalid credentials. User access denied.");
@@ -79,7 +74,6 @@ public class ImageDataServiceImpl implements ImageDataService {
         try {
             productId = Integer.valueOf(productIdStr);
         } catch (NumberFormatException e) {
-            //If product id is not an integer, return Bad Request error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
@@ -93,7 +87,6 @@ public class ImageDataServiceImpl implements ImageDataService {
         productData = productServiceImpl.getProductByProductId(productId);
 
         if(productData == null){
-            //If product with this product id does not exist, return Not Found error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
@@ -107,7 +100,7 @@ public class ImageDataServiceImpl implements ImageDataService {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("Access denied. User cannot access this resource");
+            errorResponse.setMessage("Access denied. User can't access resource");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
@@ -132,60 +125,34 @@ public class ImageDataServiceImpl implements ImageDataService {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-//        File file;
         String fileName;
         try {
-            //converting multipart file to file
-//            file = convertMultiPartToFile(multipartFile);
-
-
             fileName = userData.getUserId().toString() + "-" + productData.getProductId().toString() + "-" + LocalDateTime.now(ZoneOffset.UTC) + "-" + multipartFile.getOriginalFilename();
-//            file = convertMultiPartToFile(multipartFile);
             System.out.println(fileName);
-
             InputStream file = multipartFile.getInputStream();
-
-
             ObjectMetadata objectMetadata = new ObjectMetadata();
-
-
             objectMetadata.setContentLength(multipartFile.getSize());
-
-
             objectMetadata.setContentType(multipartFile.getContentType());
-            //Saving image to Amazon S3
-
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName,fileName,file,objectMetadata);
-
-
             s3_client.putObject(putObjectRequest);
-
-            //filename
-
 
         } catch (Exception e) {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Image cannot be uploaded. Please try again");
+            errorResponse.setMessage("Image not uploaded. Retry again");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        //Save to S3
+             s3_client.getUrl(bucketName, fileName);
 
-//        s3_client.putObject(bucketName, fileName, file);
 
-        s3_client.getUrl(bucketName, fileName);
-
-        //Save data to db
         imageDataRepo.saveProductData(productId, fileName, LocalDateTime.now(ZoneOffset.UTC), String.valueOf(s3_client.getUrl(bucketName, fileName)));
 
         ImageModel imageModel = new ImageModel();
 
         imageModel = imageDataRepo.getLastAddedImageForProductId(productId);
-
-//        file.delete();
 
         return new ResponseEntity<>(imageModel, HttpStatus.CREATED);
     }
@@ -193,13 +160,10 @@ public class ImageDataServiceImpl implements ImageDataService {
     @Override
     public ResponseEntity<Object> getImageById(String productIdStr, String username, String imageIdStr) {
 
-//        String bucketName = "csye-6225-mytest";
-
-        //Check if user exists
         UserAccountModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
-            //If User does not exist, return Unauthorized error
+
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
@@ -217,7 +181,7 @@ public class ImageDataServiceImpl implements ImageDataService {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Product Id should be an integer");
+            errorResponse.setMessage("ProductID should be integer");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -226,12 +190,11 @@ public class ImageDataServiceImpl implements ImageDataService {
         try {
             imageId = Integer.valueOf(imageIdStr);
         } catch (NumberFormatException e) {
-            //If product id is not an integer, return Bad Request error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Image Id should be an integer");
+            errorResponse.setMessage("ImageID should be integer");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -240,7 +203,6 @@ public class ImageDataServiceImpl implements ImageDataService {
         productData = productServiceImpl.getProductByProductId(productId);
 
         if(productData == null){
-            //If product with this product id does not exist, return Not Found error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
@@ -254,7 +216,7 @@ public class ImageDataServiceImpl implements ImageDataService {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("Access denied. User cannot access this resource");
+            errorResponse.setMessage("Access denied.Can't access resource");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
@@ -263,12 +225,11 @@ public class ImageDataServiceImpl implements ImageDataService {
         imageData = imageDataRepo.findByImageId(imageId);
 
         if(imageData == null){
-            //If product with this product id does not exist, return Not Found error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Image Id does not exist");
+            errorResponse.setMessage("ImageID doesn't exist");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
@@ -277,30 +238,23 @@ public class ImageDataServiceImpl implements ImageDataService {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("Access denied. User cannot access this resource");
-
+            errorResponse.setMessage("Access denied. Can't access resource");
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
-
         ImageModel imageModel = imageDataRepo.findByImageId(imageId);
-
         return new ResponseEntity<>(imageModel, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Object> getImagesByProductId(String productIdStr, String username) {
 
-//        String bucketName = "csye-6225-mytest";
-
-        //Check if user exists
         UserAccountModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
-            //If User does not exist, return Unauthorized error
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
-            errorResponse.setMessage("Invalid credentials. User access denied.");
+            errorResponse.setMessage("Invalid credentials. Access denied.");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
@@ -314,7 +268,7 @@ public class ImageDataServiceImpl implements ImageDataService {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Product Id should be an integer");
+            errorResponse.setMessage("ProductID should be integer");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -323,8 +277,6 @@ public class ImageDataServiceImpl implements ImageDataService {
         productData = productServiceImpl.getProductByProductId(productId);
 
         if(productData == null){
-            //If product with this product id does not exist, return Not Found error
-
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
@@ -337,29 +289,24 @@ public class ImageDataServiceImpl implements ImageDataService {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("Access denied. User cannot access this resource");
-
+            errorResponse.setMessage("Access denied. User can't access resource");
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
         List<ImageModel> imageModels = imageDataRepo.findByProductProductId(productId);
-
         return new ResponseEntity<>(imageModels, HttpStatus.OK);
     }
 
     public ResponseEntity<Object> deleteImageById(String productIdStr, String username, String imageIdStr) {
 
-//        String bucketName = "csye-6225-mytest";
-
-        //Check if user exists
         UserAccountModel userData = userServiceImpl.getUserDataByUsername(username);
 
         if(userData == null){
-            //If User does not exist, return Unauthorized error
+
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
-            errorResponse.setMessage("Invalid credentials. User access denied.");
+            errorResponse.setMessage("Invalid credentials. Access denied.");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
@@ -368,7 +315,6 @@ public class ImageDataServiceImpl implements ImageDataService {
         try {
             productId = Integer.valueOf(productIdStr);
         } catch (NumberFormatException e) {
-            //If product id is not an integer, return Bad Request error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
@@ -382,7 +328,6 @@ public class ImageDataServiceImpl implements ImageDataService {
         try {
             imageId = Integer.valueOf(imageIdStr);
         } catch (NumberFormatException e) {
-            //If product id is not an integer, return Bad Request error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
@@ -419,13 +364,11 @@ public class ImageDataServiceImpl implements ImageDataService {
         imageData = imageDataRepo.findByImageId(imageId);
 
         if(imageData == null){
-            //If product with this product id does not exist, return Not Found error
 
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
             errorResponse.setMessage("Image Id does not exist");
-
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
 
@@ -433,8 +376,7 @@ public class ImageDataServiceImpl implements ImageDataService {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("Access denied. User cannot access this resource");
-
+            errorResponse.setMessage("Access denied. User can't access resource");
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 

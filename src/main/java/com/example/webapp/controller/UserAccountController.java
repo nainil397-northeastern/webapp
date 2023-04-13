@@ -16,13 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.security.Principal;
-import java.util.List;
 import java.util.regex.Pattern;
-import java.io.File;
+
 
 @RestController
 //@ControllerAdvice
@@ -43,6 +40,12 @@ public class UserAccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping(path="/health")
+    public ResponseEntity<UserAccountModel> health(){
+        logger.info("Heath check is being recorded.");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping(path="/v1/user/{strUserId}")
     @ResponseBody
     public ResponseEntity<Object> getUserInfo(@PathVariable String strUserId){
@@ -57,7 +60,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("User id should be an integer");
+            errorResponse.setMessage("User id should be integer");
             logger.error("UserID is not an integer");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -73,7 +76,7 @@ public class UserAccountController {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
-                errorResponse.setMessage("User cannot access this resource");
+                errorResponse.setMessage("User can't access resource");
                 logger.error("User unable to access resource");
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
@@ -81,7 +84,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("User cannot access this resource");
+            errorResponse.setMessage("User can't access resource");
             logger.error("User unable to access resource");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -95,7 +98,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("One or more fields are null");
+            errorResponse.setMessage("One/more null fields ");
             logger.error("Null field encountered");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }else{
@@ -110,7 +113,7 @@ public class UserAccountController {
                         ErrorResponseModel errorResponse = new ErrorResponseModel();
                         errorResponse.setErr("Bad Request");
                         errorResponse.setStatus(400);
-                        errorResponse.setMessage("One or more fields are too short");
+                        errorResponse.setMessage("One/more short fields");
                         logger.error("Field value mismatch");
                         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                     }else{
@@ -122,7 +125,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("Username already exists");
+                    errorResponse.setMessage("User already exists");
                     logger.error("Username present in system");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
@@ -130,7 +133,7 @@ public class UserAccountController {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Bad Request");
                 errorResponse.setStatus(400);
-                errorResponse.setMessage("Enter a valid email address");
+                errorResponse.setMessage("Enter valid email");
                 logger.error("Invalid Email");
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
             }
@@ -149,7 +152,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("User id should be an integer");
+            errorResponse.setMessage("UserID should be integer");
             logger.error("User ID datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -162,28 +165,18 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are null");
+                    errorResponse.setMessage("One/more null fields");
                     logger.error("Null value encountered");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }else{
                     if(user.getUsername().equals(userAccountModel.getUsername())){
-//                        if(userAccountModel.getAccountCreated()!=null){
-////                        if(!user.getAccountCreated().equals(userModel.getAccountCreated())){
-//                            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-////                        }
-//                        }
-//
-//                        if(userAccountModel.getAccountUpdated()!=null){
-////                        if(!user.getAccountUpdated().equals(userModel.getAccountUpdated())){
-//                            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-////                        }
-//                        }
+
                         if(userAccountModel.getFirstName().length()<1 || userAccountModel.getLastName().length()<1 || userAccountModel.getPassword().length()<4){
                             ErrorResponseModel errorResponse = new ErrorResponseModel();
                             errorResponse.setErr("Bad Request");
                             errorResponse.setStatus(400);
-                            errorResponse.setMessage("One or more fields are too short");
+                            errorResponse.setMessage("One/more fields are short");
                             logger.error("Field Value mismatch");
                             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                         }else {
@@ -194,7 +187,7 @@ public class UserAccountController {
                         ErrorResponseModel errorResponse = new ErrorResponseModel();
                         errorResponse.setErr("Bad Request");
                         errorResponse.setStatus(400);
-                        errorResponse.setMessage("Please enter correct username in request body");
+                        errorResponse.setMessage("Enter correct username");
                         logger.error("Incorrect username value passed");
                         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                     }
@@ -203,7 +196,7 @@ public class UserAccountController {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
-                errorResponse.setMessage("User cannot access this resource");
+                errorResponse.setMessage("User can't access resource");
                 logger.error("Resource inaccessible");
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
@@ -211,7 +204,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("User cannot access this resource");
+            errorResponse.setMessage("User can't access resource");
             logger.error("Resource inaccessible");
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
@@ -229,7 +222,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Product Id should be an integer");
+            errorResponse.setMessage("ProductID should be integer");
             logger.error("Product ID datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -241,7 +234,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Not Found");
             errorResponse.setStatus(404);
-            errorResponse.setMessage("Product Id does not exist");
+            errorResponse.setMessage("ProductID doesn't exist");
             logger.error("No information against Product ID");
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }else{
@@ -263,7 +256,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
-            errorResponse.setMessage("Invalid credentials. User access denied.");
+            errorResponse.setMessage("Invalid credentials. Access denied.");
             logger.error("Credential  mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
@@ -277,7 +270,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Quantity should be an integer");
+            errorResponse.setMessage("Quantity should be integer");
             logger.error("Quantity datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -286,7 +279,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("One or more fields are null");
+            errorResponse.setMessage("One/more null fields");
             logger.error("Null value encountered in Field");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }else{
@@ -299,7 +292,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are too short");
+                    errorResponse.setMessage("One/more fields are short");
                     logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -307,7 +300,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("Quantity should be between 0 and 100, both inclusive");
+                    errorResponse.setMessage("Quantity should be between 0 to 100");
                     logger.error("Quantity out of limit");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }else{
@@ -339,7 +332,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
-            errorResponse.setMessage("Invalid credentials. User access denied.");
+            errorResponse.setMessage("Invalid credentials. Access denied.");
             logger.error("Credential Mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
@@ -353,7 +346,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Product Id should be an integer");
+            errorResponse.setMessage("ProductID should be integer");
             logger.error("Product ID datatype mismatch");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -362,7 +355,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("One or more fields are null");
+            errorResponse.setMessage("One/more null fields ");
             logger.error("Null value for Fields");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -375,7 +368,7 @@ public class UserAccountController {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
-                errorResponse.setMessage("User cannot access this resource");
+                errorResponse.setMessage("User can't access resource");
                 logger.error("Inaccessible User");
 
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -383,7 +376,7 @@ public class UserAccountController {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Forbideen");
                 errorResponse.setStatus(403);
-                errorResponse.setMessage("User cannot access this resource");
+                errorResponse.setMessage("User can't access resource");
                 logger.error("Inaccessible User");
 
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -392,7 +385,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are too short");
+                    errorResponse.setMessage("One/more fields are short");
                     logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -400,7 +393,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("Quantity should be between 0 and 100, both inclusive");
+                    errorResponse.setMessage("Quantity should be between 0 to 100");
                     logger.error("Quantity out of bounds");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -444,7 +437,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
-            errorResponse.setMessage("Invalid credentials. User access denied.");
+            errorResponse.setMessage("Invalid credentials. Access denied.");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
@@ -458,7 +451,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Product Id should be an integer");
+            errorResponse.setMessage("ProductID should be integer");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
@@ -470,14 +463,14 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("User cannot access this resource");
+            errorResponse.setMessage("User can't access resource");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }else if(searchProduct.getUser().getUserId() != userData.getUserId()){
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Forbidden");
             errorResponse.setStatus(403);
-            errorResponse.setMessage("User cannot access this resource");
+            errorResponse.setMessage("User can't access resource");
 
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }else{
@@ -485,7 +478,7 @@ public class UserAccountController {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Bad Request");
                 errorResponse.setStatus(400);
-                errorResponse.setMessage("Please enter at least one mandatory field");
+                errorResponse.setMessage("Please enter mandatory field");
 
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
             }
@@ -495,7 +488,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are too short");
+                    errorResponse.setMessage("One/more fields are  short");
                     logger.error("Incorrect Field value");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
@@ -508,7 +501,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are too short");
+                    errorResponse.setMessage("One/more fields are short");
                     logger.error("Incorrect Field value");
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
@@ -521,7 +514,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are too short");
+                    errorResponse.setMessage("One/more fields are short");
                     logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -535,7 +528,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are too short");
+                    errorResponse.setMessage("One/more fields are short");
                     logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -549,7 +542,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("One or more fields are too short");
+                    errorResponse.setMessage("One/more fields are short");
                     logger.error("Incorrect Field value");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -563,7 +556,7 @@ public class UserAccountController {
                     ErrorResponseModel errorResponse = new ErrorResponseModel();
                     errorResponse.setErr("Bad Request");
                     errorResponse.setStatus(400);
-                    errorResponse.setMessage("Quantity should be between 0 and 100, both inclusive");
+                    errorResponse.setMessage("Quantity should be between 0 to 100");
 
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
@@ -611,7 +604,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Unauthorized");
             errorResponse.setStatus(401);
-            errorResponse.setMessage("Invalid credentials. User access denied.");
+            errorResponse.setMessage("Invalid credentials. Access denied.");
             logger.error("Credential Access");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
@@ -646,7 +639,7 @@ public class UserAccountController {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
                 errorResponse.setErr("Forbidden");
                 errorResponse.setStatus(403);
-                errorResponse.setMessage("User cannot access this resource");
+                errorResponse.setMessage("User can't access resource");
                 logger.error("Accessibility Issue");
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
@@ -677,7 +670,7 @@ public class UserAccountController {
             ErrorResponseModel errorResponse = new ErrorResponseModel();
             errorResponse.setErr("Bad Request");
             errorResponse.setStatus(400);
-            errorResponse.setMessage("Image cannot be uploaded. Please try again");
+            errorResponse.setMessage("Image not uploaded. Retry ");
             logger.error("Error in uploading Image");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
