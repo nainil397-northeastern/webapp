@@ -90,6 +90,50 @@ public class UserAccountController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
+//    @GetMapping(path="/v1/user/{strUserId}")
+//    @ResponseBody
+//    public ResponseEntity<Object> getUserInfo(@PathVariable String strUserId){
+//
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String username = auth.getName();
+//        Integer userId;
+//
+//        try {
+//            userId = Integer.parseInt(strUserId);
+//        } catch (NumberFormatException e) {
+//            ErrorResponseModel errorResponse = new ErrorResponseModel();
+//            errorResponse.setErr("Bad Request");
+//            errorResponse.setStatus(400);
+//            errorResponse.setMessage("User id should be integer");
+//            logger.error("UserID is not an integer");
+//
+//            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//        }
+//        UserAccountModel user = new UserAccountModel();
+//        user = userServiceImpl.getUserDataById(userId);
+//
+//        if(user != null){
+//            if(user.getUsername().equals(username)){
+//                logger.info("UserID is accessible");
+//                return new ResponseEntity<>(user, HttpStatus.OK);
+//            }else {
+//                ErrorResponseModel errorResponse = new ErrorResponseModel();
+//                errorResponse.setErr("Forbidden");
+//                errorResponse.setStatus(403);
+//                errorResponse.setMessage("User can't access resource");
+//                logger.error("User unable to access resource");
+//                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+//            }
+//        }else{
+//            ErrorResponseModel errorResponse = new ErrorResponseModel();
+//            errorResponse.setErr("Forbidden");
+//            errorResponse.setStatus(403);
+//            errorResponse.setMessage("User can't access resource");
+//            logger.error("User unable to access resource");
+//
+//            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+//        }
+//    }
 
     @PostMapping(path="/v1/user")
     @ResponseBody
