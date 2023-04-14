@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.regex.Pattern;
@@ -36,13 +37,13 @@ public class UserAccountController {
     ProductServiceImpl productServiceImpl;
     @GetMapping(path="/healthz")
     public ResponseEntity<UserAccountModel> healthz(){
-        logger.info("Heath check is being recorded.");
+        logger.info("Health check is being recorded.");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(path="/health")
     public ResponseEntity<UserAccountModel> health(){
-        logger.info("Heath check is being recorded.");
+        logger.info("Health check is being recorded.");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -90,50 +91,6 @@ public class UserAccountController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
-//    @GetMapping(path="/v1/user/{strUserId}")
-//    @ResponseBody
-//    public ResponseEntity<Object> getUserInfo(@PathVariable String strUserId){
-//
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        String username = auth.getName();
-//        Integer userId;
-//
-//        try {
-//            userId = Integer.parseInt(strUserId);
-//        } catch (NumberFormatException e) {
-//            ErrorResponseModel errorResponse = new ErrorResponseModel();
-//            errorResponse.setErr("Bad Request");
-//            errorResponse.setStatus(400);
-//            errorResponse.setMessage("User id should be integer");
-//            logger.error("UserID is not an integer");
-//
-//            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-//        }
-//        UserAccountModel user = new UserAccountModel();
-//        user = userServiceImpl.getUserDataById(userId);
-//
-//        if(user != null){
-//            if(user.getUsername().equals(username)){
-//                logger.info("UserID is accessible");
-//                return new ResponseEntity<>(user, HttpStatus.OK);
-//            }else {
-//                ErrorResponseModel errorResponse = new ErrorResponseModel();
-//                errorResponse.setErr("Forbidden");
-//                errorResponse.setStatus(403);
-//                errorResponse.setMessage("User can't access resource");
-//                logger.error("User unable to access resource");
-//                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
-//            }
-//        }else{
-//            ErrorResponseModel errorResponse = new ErrorResponseModel();
-//            errorResponse.setErr("Forbidden");
-//            errorResponse.setStatus(403);
-//            errorResponse.setMessage("User can't access resource");
-//            logger.error("User unable to access resource");
-//
-//            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
-//        }
-//    }
 
     @PostMapping(path="/v1/user")
     @ResponseBody

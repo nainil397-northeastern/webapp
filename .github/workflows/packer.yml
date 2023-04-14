@@ -66,7 +66,6 @@ jobs:
           aws-region: us-east-1
 
       - name: Get new AMI ID and create new launch template
-       
         run: |
           AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
           echo $AMI_ID
@@ -75,6 +74,7 @@ jobs:
           --launch-template-name nainil_check \
           --source-version 1 \
           --launch-template-data "ImageId=$AMI_ID"
+          
       - name: Instance Refresh
         run: |
           aws autoscaling start-instance-refresh --auto-scaling-group-name asg_launch_config
