@@ -63,7 +63,7 @@ public class BasicAuth {
                 .permitAll()
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/v1/user")
+                .requestMatchers("/v2/user")
                 .permitAll()
                 .and()
                 .authorizeRequests()
