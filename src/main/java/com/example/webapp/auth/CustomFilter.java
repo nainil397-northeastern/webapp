@@ -42,15 +42,15 @@ public class CustomFilter  extends GenericFilterBean {
             ServletRequest request,
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
+if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v2/user/")){
 
             statsd.incrementCounter("endpoint.get.v1.user");
-            logger.info("Encountered endpoint : (GET) /v1/user/userId");
+            logger.info("Encountered endpoint : (GET) /v2/user/userId");
 
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PUT") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
+        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PUT") && ((HttpServletRequest)request).getRequestURI().contains("/v2/user/")){
 
             statsd.incrementCounter("endpoint.put.v1.user");
-            logger.info("Encountered endpoint : (PUT) /v1/user/userId");
+            logger.info("Encountered endpoint : (PUT) /v2/user/userId");
 
         }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("POST") && ((HttpServletRequest)request).getRequestURI().contains("/v1/product/") && ((HttpServletRequest)request).getRequestURI().contains("/image")){
 
