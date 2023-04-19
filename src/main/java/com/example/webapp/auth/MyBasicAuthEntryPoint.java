@@ -128,6 +128,7 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
             int i = 0;
         }
 
+        
         PrintWriter out = response.getWriter();
 
         logger.error("Credentials invalid. Username/password incorrect");
