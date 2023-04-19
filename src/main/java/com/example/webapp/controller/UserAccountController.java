@@ -92,6 +92,7 @@ public class UserAccountController {
         }
     }
 
+    
     @PostMapping(path="/v1/user")
     @ResponseBody
     public ResponseEntity<Object> AddUserInfo(@RequestBody UserAccountModel userAccountModel){
