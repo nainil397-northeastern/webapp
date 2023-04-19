@@ -47,7 +47,7 @@ public class UserAccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(path="/v1/user/{strUserId}")
+    @GetMapping(path="/v2/user/{strUserId}")
     @ResponseBody
     public ResponseEntity<Object> getUserInfo(@PathVariable String strUserId){
 
@@ -92,7 +92,7 @@ public class UserAccountController {
         }
     }
 
-    
+   
     @PostMapping(path="/v1/user")
     @ResponseBody
     public ResponseEntity<Object> AddUserInfo(@RequestBody UserAccountModel userAccountModel){

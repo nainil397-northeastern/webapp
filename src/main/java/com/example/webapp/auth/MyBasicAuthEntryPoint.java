@@ -34,17 +34,17 @@ public class MyBasicAuthEntryPoint extends BasicAuthenticationEntryPoint {
         /* This function generates basic auth token and is used for user
         * credential validation*/
 
-       if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
+       if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET") && ((HttpServletRequest)request).getRequestURI().contains("/v2/user/")){
 
             statsd.incrementCounter("endpoint.get.v1.user");
-            logger.info("Encountered endpoint : (GET) /v1/user/userId");
+            logger.info("Encountered endpoint : (GET) /v2/user/userId");
             logger.error("Invalid credentials. Error encountered");
             logger.info("Returned invalid credentials");
 
-        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PUT") && ((HttpServletRequest)request).getRequestURI().contains("/v1/user/")){
+        }else if(((HttpServletRequest)request).getMethod().equalsIgnoreCase("PUT") && ((HttpServletRequest)request).getRequestURI().contains("/v2/user/")){
 
             statsd.incrementCounter("endpoint.put.v1.user");
-            logger.info("Encountered endpoint : (PUT) /v1/user/userId");
+            logger.info("Encountered endpoint : (PUT) /v2/user/userId");
             logger.error("Invalid credentials. Error encountered");
             logger.info("Returned invalid credentials");
 
