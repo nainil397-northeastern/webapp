@@ -89,3 +89,4 @@ aws acm import-certificate --certificate fileb://D:/NEU\ MIS\ course\ first\ yea
 2. packer validate -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 3. packer build -var-file=creds.auto.pkrvars.hcl ami-packer.pkr.hcl
 
+demo
